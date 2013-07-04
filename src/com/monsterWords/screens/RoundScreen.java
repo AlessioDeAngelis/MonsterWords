@@ -1,10 +1,10 @@
 package com.monsterWords.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.monsterWords.controller.RoundController;
@@ -61,53 +61,55 @@ public class RoundScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		Hero hero = this.round.getHero();
+		float speed = hero.getSpeedValue();
+		if (keycode == Keys.LEFT) {
+			hero.translateX(-speed);
+		}
+		if (keycode == Keys.RIGHT) {
+			hero.translateX(speed);
+		}
+		if (keycode == Keys.UP) {
+			hero.translateY(speed);
+		}
+		if (keycode == Keys.DOWN) {
+			hero.translateY(-speed);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		Hero hero = this.round.getHero();
-		Body bodyHero = hero.getBody();
-		bodyHero.setAwake(true);
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		Hero hero = this.round.getHero();
-		Body bodyHero = hero.getBody();
-		bodyHero.setAwake(false);
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

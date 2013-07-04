@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.monsterWords.listeners.CollisionListener;
 import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
 import com.monsterWords.model.Round;
@@ -36,8 +37,7 @@ public class RoundController {
 	private void createHero() {
 		// Create our body definition
 		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.awake = false;
+//		bodyDef.type = BodyType.StaticBody;
 		// Set its world position
 		bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE,
 				Math.round(Math.random() * 440 + 20) / WORLD_SCALE);		// Create a body from the defintion and add it to the world
@@ -140,6 +140,7 @@ public class RoundController {
 	}
 
 	public void update(float delta) {
+		this.round.update(delta);
 		this.round.getBox2DWorld().step(1 / 60f, 6, 2);
 	}
 
