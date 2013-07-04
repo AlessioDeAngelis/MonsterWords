@@ -1,13 +1,16 @@
 package com.monsterWords.model;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.monsterWords.utils.Constants;
+
 public class Hero extends Entity {
 
-	private float speedX;
+	private float speedValue;
 	private char letter;
 
 	public Hero() {
 		super();
-		this.setSpeedX(2.0f);
+		this.setSpeedValue(20f);
 		this.letter = 'a';
 	}
 
@@ -19,16 +22,25 @@ public class Hero extends Entity {
 		this.letter = letter;
 	}
 
-	public float getSpeedX() {
-		return speedX;
+	public float getSpeedValue() {
+		return speedValue;
 	}
 
-	public void setSpeedX(float speedX) {
-		this.speedX = speedX;
+	public void setSpeedValue(float speedX) {
+		this.speedValue = speedX;
 	}
 
 	@Override
 	public void collisionHappened() {
-		
+
+	}
+
+	public void update(float dt) {
+		Body body = this.getBody();
+		if (body != null) {
+			float bodyX = this.getX()/Constants.WORLD_SCALE;
+			float bodyY = this.getY()/Constants.WORLD_SCALE;
+			body.setTransform(bodyX, bodyY, body.getAngle());
+		}
 	}
 }
