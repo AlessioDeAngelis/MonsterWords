@@ -107,7 +107,7 @@ public class RoundView {
 		BitmapFont font = new BitmapFont();
 		CharSequence str = this.round.getHero().getLettersCollected().toString();
 		font.draw(spriteBatch, str, 100, 100);
-		str = ""+this.round.getLettersOnTheTable().size();
+		str = ""+this.round.getHero().getTotalScore();
 		font.draw(spriteBatch,str , 100, 500);
 
 	}

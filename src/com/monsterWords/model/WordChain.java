@@ -9,17 +9,24 @@ public class WordChain {
 
 	public WordChain() {
 		super();
-		this.letterChain = new ArrayList<Letter>(); {
-		};
+		this.letterChain = new ArrayList<Letter>();
 	}
-	
-	public void addLetter(Letter letter){
+
+	public List<Letter> getLetterChain() {
+		return letterChain;
+	}
+
+	public void setLetterChain(List<Letter> letterChain) {
+		this.letterChain = letterChain;
+	}
+
+	public void addLetter(Letter letter) {
 		this.letterChain.add(letter);
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		String word = "";
-		for(Letter letter : letterChain){
+		for (Letter letter : letterChain) {
 			word += letter.getLetter();
 		}
 		return word;

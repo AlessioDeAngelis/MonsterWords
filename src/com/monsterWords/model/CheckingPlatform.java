@@ -1,5 +1,10 @@
 package com.monsterWords.model;
 
-public class CheckingPlatform {
+public class CheckingPlatform extends Entity{
+		
+	@Override
+	public void collisionHappened() {
+		
+	}
 
 }
