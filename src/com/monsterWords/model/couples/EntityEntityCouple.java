@@ -1,6 +1,6 @@
 package com.monsterWords.model.couples;
 
-public class LetterLetterCouple implements CoupleOfEntities{
+public class EntityEntityCouple implements CoupleOfEntities{
 
 	@Override
 	public void collisionHappened() {

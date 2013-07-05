@@ -9,19 +9,28 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.monsterWords.listeners.CollisionListener;
+import com.monsterWords.model.CheckingPlatform;
 import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
 import com.monsterWords.model.Round;
+import com.monsterWords.model.WordChain;
 import com.monsterWords.utils.Constants;
 
 public class RoundController {
 	private Round round;
 	private static final float WORLD_SCALE = Constants.WORLD_SCALE;
+	private ScoreManager scoreManager;
+	/**
+	 * This variable is used to keep track of the id that must be assigned to
+	 * the letter in order to be unique
+	 * */
+	private float nextId;
 
 	public RoundController(Round round) {
 		super();
 		this.round = round;
+		this.nextId = 0;
+		this.scoreManager = new ScoreManager();
 	}
 
 	public void populateWorld() {
@@ -29,18 +38,47 @@ public class RoundController {
 	}
 
 	public void setUpBox2D() {
-		createBalls(10);
+		createLetters(1);
 		createWalls();
 		createHero();
+		createPlatform();
+	}
+
+	private void createPlatform() {
+		// Create our body definition
+		BodyDef platformBodyDef = new BodyDef();
+		platformBodyDef.type = BodyType.DynamicBody;
+		// Set its world position
+		platformBodyDef.position.set(new Vector2(Gdx.graphics.getWidth() / 2f / WORLD_SCALE, Gdx.graphics.getHeight()
+				/ 2f / WORLD_SCALE));
+		// Create a body from the defintion and add it to the world
+		Body platformBody = this.round.getBox2DWorld().createBody(platformBodyDef);
+		CheckingPlatform checkingPlatform = new CheckingPlatform();
+		platformBody.setUserData(checkingPlatform);
+		checkingPlatform.setBody(platformBody);
+		// Create a polygon shape
+		PolygonShape platformBox = new PolygonShape();
+		// Set the polygon shape as a box which is twice the size of our view
+		// port and 20 high
+		// (setAsBox takes half-width and half-height as arguments)
+		platformBox.setAsBox(30 / WORLD_SCALE, 30 / WORLD_SCALE);
+		// Create a fixture from our polygon shape and add it to our ground body
+		Fixture platformFixture = platformBody.createFixture(platformBox, 0.0f);
+		platformFixture.setRestitution(1f);
+		platformFixture.setDensity(1f);
+		platformFixture.setFriction(0f);
+		// Clean up after ourselves
+		platformBox.dispose();
 	}
 
 	private void createHero() {
 		// Create our body definition
 		BodyDef bodyDef = new BodyDef();
-//		bodyDef.type = BodyType.StaticBody;
+		// bodyDef.type = BodyType.StaticBody;
 		// Set its world position
-		bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE,
-				Math.round(Math.random() * 440 + 20) / WORLD_SCALE);		// Create a body from the defintion and add it to the world
+		bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE, Math.round(Math.random() * 440 + 20)
+				/ WORLD_SCALE); // Create a body from the defintion and add it
+								// to the world
 		Body heroBody = this.round.getBox2DWorld().createBody(bodyDef);
 
 		// Create a polygon shape
@@ -62,7 +100,7 @@ public class RoundController {
 		this.round.setHero(hero);
 	}
 
-	public void createBalls(int numberOfBalls) {
+	public void createLetters(int numberOfBalls) {
 		float circleSpeed = 50f;
 		for (int i = 0; i < numberOfBalls; i++) {
 			// First we create a body definition
@@ -85,6 +123,8 @@ public class RoundController {
 			body.setLinearVelocity(vx, vy);
 			body.setAngularVelocity(0.5f);
 			Letter letter = new Letter();
+			this.nextId++;
+			letter.setId(nextId);
 			body.setUserData(letter);
 			// Create a circle shape and set its radius to 6
 			CircleShape circle = new CircleShape();
@@ -140,8 +180,15 @@ public class RoundController {
 	}
 
 	public void update(float delta) {
-		this.round.update(delta);
 		this.round.getBox2DWorld().step(1 / 60f, 6, 2);
+		this.round.update(delta);
+		Hero hero = this.round.getHero();
+		if(hero.getHasAMatchingCombination()){
+			WordChain word = hero.getLettersCollected();
+			int wordScore = this.scoreManager.score(word);
+			hero.addScore(wordScore);
+			hero.reset();
+		}
 	}
 
 }
