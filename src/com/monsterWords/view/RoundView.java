@@ -5,12 +5,12 @@ import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
 import com.monsterWords.model.Round;
@@ -97,8 +97,18 @@ public class RoundView {
 				}
 			}
 		}
+		renderText();
 		spriteBatch.end();
 		this.debugRenderer.render(this.round.getBox2DWorld(), cam.combined);
 		this.debugRenderer.setDrawVelocities(true);
+	}
+	
+	public void renderText(){
+		BitmapFont font = new BitmapFont();
+		CharSequence str = this.round.getHero().getLettersCollected().toString();
+		font.draw(spriteBatch, str, 100, 100);
+		str = ""+this.round.getLettersOnTheTable().size();
+		font.draw(spriteBatch,str , 100, 500);
+
 	}
 }

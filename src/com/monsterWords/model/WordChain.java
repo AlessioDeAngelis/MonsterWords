@@ -1,14 +1,16 @@
 package com.monsterWords.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WordChain {
 
 	private List<Letter> letterChain;
 
-	public WordChain(List<Letter> letterChain) {
+	public WordChain() {
 		super();
-		this.letterChain = letterChain;
+		this.letterChain = new ArrayList<Letter>(); {
+		};
 	}
 	
 	public void addLetter(Letter letter){

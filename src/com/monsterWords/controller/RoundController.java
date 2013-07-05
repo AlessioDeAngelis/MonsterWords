@@ -18,10 +18,16 @@ import com.monsterWords.utils.Constants;
 public class RoundController {
 	private Round round;
 	private static final float WORLD_SCALE = Constants.WORLD_SCALE;
-
+	/**
+	 * This variable is used to keep track of the id that must be assigned
+	 * to the letter in order to be unique
+	 * */
+	private float nextId;
+	
 	public RoundController(Round round) {
 		super();
 		this.round = round;
+		this.nextId = 0;
 	}
 
 	public void populateWorld() {
@@ -29,7 +35,7 @@ public class RoundController {
 	}
 
 	public void setUpBox2D() {
-		createBalls(10);
+		createLetters(10);
 		createWalls();
 		createHero();
 	}
@@ -62,7 +68,7 @@ public class RoundController {
 		this.round.setHero(hero);
 	}
 
-	public void createBalls(int numberOfBalls) {
+	public void createLetters(int numberOfBalls) {
 		float circleSpeed = 50f;
 		for (int i = 0; i < numberOfBalls; i++) {
 			// First we create a body definition
@@ -85,6 +91,8 @@ public class RoundController {
 			body.setLinearVelocity(vx, vy);
 			body.setAngularVelocity(0.5f);
 			Letter letter = new Letter();
+			this.nextId++;
+			letter.setId(nextId);
 			body.setUserData(letter);
 			// Create a circle shape and set its radius to 6
 			CircleShape circle = new CircleShape();
@@ -100,7 +108,7 @@ public class RoundController {
 			// Remember to dispose of any shapes after you're done with them!
 			// BodyDef and FixtureDef don't need disposing, but shapes do.
 			circle.dispose();
-
+			
 			this.round.addLetter(letter);
 		}
 
@@ -140,8 +148,8 @@ public class RoundController {
 	}
 
 	public void update(float delta) {
-		this.round.update(delta);
 		this.round.getBox2DWorld().step(1 / 60f, 6, 2);
+		this.round.update(delta);
 	}
 
 }

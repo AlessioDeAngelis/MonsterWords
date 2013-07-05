@@ -7,11 +7,13 @@ public class Hero extends Entity {
 
 	private float speedValue;
 	private char letter;
-
+	private WordChain lettersCollected;
+	
 	public Hero() {
 		super();
 		this.setSpeedValue(20f);
 		this.letter = 'a';
+		this.lettersCollected = new WordChain();
 	}
 
 	public char getLetter() {
@@ -28,6 +30,15 @@ public class Hero extends Entity {
 
 	public void setSpeedValue(float speedX) {
 		this.speedValue = speedX;
+	}	
+	
+
+	public WordChain getLettersCollected() {
+		return lettersCollected;
+	}
+
+	public void setLettersCollected(WordChain lettersCollected) {
+		this.lettersCollected = lettersCollected;
 	}
 
 	@Override
