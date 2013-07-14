@@ -2,14 +2,16 @@ package com.monsterWords.controller.factories;
 
 import com.monsterWords.model.CheckingPlatform;
 import com.monsterWords.model.Entity;
-import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
+import com.monsterWords.model.Monster;
 import com.monsterWords.model.Round;
 import com.monsterWords.model.couples.CoupleOfEntities;
 import com.monsterWords.model.couples.EntityEntityCouple;
 import com.monsterWords.model.couples.HeroLetterCouple;
+import com.monsterWords.model.couples.HeroMonsterCouple;
 import com.monsterWords.model.couples.HeroPlatformCouple;
 import com.monsterWords.model.couples.LetterLetterCouple;
+import com.monsterWords.model.hero.Hero;
 
 public class CoupleOfEntitiesFactory {
 
@@ -43,12 +45,18 @@ public class CoupleOfEntitiesFactory {
 		} else if (Hero.class.isAssignableFrom(e1Clazz)) {
 			if (Letter.class.isAssignableFrom(e2Clazz)) {
 				entities = new HeroLetterCouple((Hero) e1, (Letter) e2, currentRound);
-			}else if(CheckingPlatform.class.isAssignableFrom(e2Clazz)){
+			} else if (CheckingPlatform.class.isAssignableFrom(e2Clazz)) {
 				entities = new HeroPlatformCouple((Hero) e1, (CheckingPlatform) e2, currentRound);
-			}
-		}else if(CheckingPlatform.class.isAssignableFrom(e1Clazz)){
-			if (Hero.class.isAssignableFrom(e2Clazz)){
-				entities = new HeroPlatformCouple((Hero) e2, (CheckingPlatform) e1, currentRound);
+			} else if (Monster.class.isAssignableFrom(e2Clazz)) {
+				entities = new HeroMonsterCouple((Hero) e1, (Monster) e2, currentRound);
+			} else if (CheckingPlatform.class.isAssignableFrom(e1Clazz)) {
+				if (Hero.class.isAssignableFrom(e2Clazz)) {
+					entities = new HeroPlatformCouple((Hero) e2, (CheckingPlatform) e1, currentRound);
+				}
+			} else if (Monster.class.isAssignableFrom(e1Clazz)) {
+				if (Hero.class.isAssignableFrom(e2Clazz)) {
+					entities = new HeroMonsterCouple((Hero) e2, (Monster) e1, currentRound);
+				}
 			}
 		}
 		return entities;

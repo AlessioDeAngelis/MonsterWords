@@ -8,11 +8,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.monsterWords.listeners.CollisionListener;
+import com.monsterWords.model.hero.Hero;
 
 public class Round {
 	private World box2DWorld;
 	private List<Letter> lettersOnTheTable;
 	private Hero hero;
+	private Monster monster;
 
 	public Round() {
 		super();
@@ -20,9 +22,17 @@ public class Round {
 		this.box2DWorld = new World(new Vector2(0, 0), true);
 		this.box2DWorld.setContactListener(new CollisionListener(this));
 		this.lettersOnTheTable = new ArrayList<Letter>();
+		this.monster = new Monster();
+	}
+	
+	public Monster getMonster() {
+		return monster;
 	}
 
-	
+	public void setMonster(Monster monster) {
+		this.monster = monster;
+	}
+
 	public World getBox2DWorld() {
 		return box2DWorld;
 	}
@@ -57,6 +67,7 @@ public class Round {
 	
 	public void update(float dt){
 		hero.update(dt);
+		monster.update(dt);
 		checkForBodiesToDelete();
 	}
 

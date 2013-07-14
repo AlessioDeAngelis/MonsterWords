@@ -1,10 +1,8 @@
 package com.monsterWords.model.couples;
 
-import com.monsterWords.controller.WordListMatcher;
 import com.monsterWords.model.CheckingPlatform;
-import com.monsterWords.model.Hero;
-import com.monsterWords.model.Letter;
 import com.monsterWords.model.Round;
+import com.monsterWords.model.hero.Hero;
 
 public class HeroPlatformCouple implements CoupleOfEntities{
 	private Hero hero;
@@ -20,9 +18,7 @@ public class HeroPlatformCouple implements CoupleOfEntities{
 	
 	@Override
 	public void collisionHappened() {
-		String word = this.hero.getLettersCollected().toString();
-		boolean matchOccured = WordListMatcher.getInstance().match(word);
-		this.hero.setHasAMatchingCombination(true);
+		this.hero.setOnPlatform(true);
 	}
 
 }

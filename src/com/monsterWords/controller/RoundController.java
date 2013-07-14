@@ -1,5 +1,8 @@
 package com.monsterWords.controller;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -9,28 +12,29 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.monsterWords.controller.languages.EnglishLanguageController;
+import com.monsterWords.controller.languages.ItalianLanguageController;
+import com.monsterWords.controller.languages.LanguageController;
 import com.monsterWords.model.CheckingPlatform;
-import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
+import com.monsterWords.model.Monster;
 import com.monsterWords.model.Round;
+import com.monsterWords.model.Wall;
 import com.monsterWords.model.WordChain;
+import com.monsterWords.model.hero.Hero;
 import com.monsterWords.utils.Constants;
 
 public class RoundController {
 	private Round round;
 	private static final float WORLD_SCALE = Constants.WORLD_SCALE;
 	private ScoreManager scoreManager;
-	/**
-	 * This variable is used to keep track of the id that must be assigned to
-	 * the letter in order to be unique
-	 * */
-	private float nextId;
+	private LanguageController languageController;
 
 	public RoundController(Round round) {
 		super();
 		this.round = round;
-		this.nextId = 0;
 		this.scoreManager = new ScoreManager();
+		this.languageController = new ItalianLanguageController();//TODO: add factory
 	}
 
 	public void populateWorld() {
@@ -38,16 +42,46 @@ public class RoundController {
 	}
 
 	public void setUpBox2D() {
-		createLetters(1);
+		createLetters(10);
 		createWalls();
 		createHero();
 		createPlatform();
+		createMonster();
+	}
+
+	private void createMonster() {
+		// Create our body definition
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		// Set its world position
+		bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE, Math.round(Math.random() * 440 + 20)
+				/ WORLD_SCALE); // Create a body from the defintion and add it
+								// to the world
+		Body monsterBody = this.round.getBox2DWorld().createBody(bodyDef);
+
+		// Create a polygon shape
+		PolygonShape monsterBox = new PolygonShape();
+		// Set the polygon shape as a box which is twice the size of our view
+		// port and 20 high
+		// (setAsBox takes half-width and half-height as arguments)
+		monsterBox.setAsBox(17 / WORLD_SCALE, 29 / WORLD_SCALE);
+		// Create a fixture from our polygon shape and add it to our ground body
+		Fixture monsterFixture = monsterBody.createFixture(monsterBox, 0.0f);
+		monsterFixture.setRestitution(1f);
+		monsterFixture.setDensity(1f);
+		monsterFixture.setFriction(0f);
+		// Clean up after ourselves
+		monsterBox.dispose();
+		Monster monster = new Monster();
+		monster.setBody(monsterBody);
+		monsterBody.setUserData(monster);
+		this.round.setMonster(monster);
 	}
 
 	private void createPlatform() {
 		// Create our body definition
 		BodyDef platformBodyDef = new BodyDef();
-		platformBodyDef.type = BodyType.DynamicBody;
+		platformBodyDef.type = BodyType.StaticBody;
 		// Set its world position
 		platformBodyDef.position.set(new Vector2(Gdx.graphics.getWidth() / 2f / WORLD_SCALE, Gdx.graphics.getHeight()
 				/ 2f / WORLD_SCALE));
@@ -74,7 +108,7 @@ public class RoundController {
 	private void createHero() {
 		// Create our body definition
 		BodyDef bodyDef = new BodyDef();
-		// bodyDef.type = BodyType.StaticBody;
+		bodyDef.type = BodyType.DynamicBody;
 		// Set its world position
 		bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE, Math.round(Math.random() * 440 + 20)
 				/ WORLD_SCALE); // Create a body from the defintion and add it
@@ -100,9 +134,11 @@ public class RoundController {
 		this.round.setHero(hero);
 	}
 
-	public void createLetters(int numberOfBalls) {
+	public void createLetters(int numberOfLetters) {
+		List<Letter> letters = this.languageController.giveACombination(numberOfLetters);
+		Collections.shuffle(letters);
 		float circleSpeed = 50f;
-		for (int i = 0; i < numberOfBalls; i++) {
+		for (int i = 0; i < numberOfLetters; i++) {
 			// First we create a body definition
 			BodyDef bodyDef = new BodyDef();
 			// We set our body to dynamic, for something like ground which
@@ -121,10 +157,8 @@ public class RoundController {
 			float vx = (float) (circleSpeed * Math.cos(randomAngle));
 			float vy = (float) (circleSpeed * Math.sin(randomAngle));
 			body.setLinearVelocity(vx, vy);
-			body.setAngularVelocity(0.5f);
-			Letter letter = new Letter();
-			this.nextId++;
-			letter.setId(nextId);
+			body.setAngularVelocity(0.2f);//previous 0.5
+			Letter letter = letters.get(i);
 			body.setUserData(letter);
 			// Create a circle shape and set its radius to 6
 			CircleShape circle = new CircleShape();
@@ -149,14 +183,15 @@ public class RoundController {
 	public void createWalls() {
 		float tickness = 10f;
 		float epsilon = 0.1f;
-		addWall(epsilon, epsilon, Gdx.graphics.getWidth(), tickness);
-		addWall(epsilon, epsilon, tickness, Gdx.graphics.getHeight());
-		addWall(epsilon, Gdx.graphics.getHeight() - epsilon, Gdx.graphics.getWidth(), tickness);
+		addWall(epsilon, epsilon, tickness, Gdx.graphics.getHeight(),"wallLeft");
+		addWall(epsilon, Gdx.graphics.getHeight() - epsilon, Gdx.graphics.getWidth(), tickness,"wallFront");
 		addWall(Gdx.graphics.getWidth() - epsilon, Gdx.graphics.getHeight() - epsilon, tickness,
-				Gdx.graphics.getHeight());
+				Gdx.graphics.getHeight(),"wallLeft");
+		addWall(epsilon, epsilon, Gdx.graphics.getWidth(), tickness,"wallFront");
+
 	}
 
-	private void addWall(float px, float py, float width, float height) {
+	private void addWall(float px, float py, float width, float height, String type) {
 		// Create our body definition
 		BodyDef groundBodyDef = new BodyDef();
 		// Set its world position
@@ -177,17 +212,35 @@ public class RoundController {
 		groundFixture.setFriction(0f);
 		// Clean up after ourselves
 		groundBox.dispose();
+		Wall wall = new Wall();
+		wall.setType(type);
+		groundBody.setUserData(wall);
+		wall.setBody(groundBody);
 	}
 
+	/*
+	 * Here there is the game loop 1)box2d world is simulated 2)the sprite
+	 * world(round) is update 3)check if the hero has a winning combination
+	 * 4)have always 10 letters in the ground after the checking
+	 */
 	public void update(float delta) {
-		this.round.getBox2DWorld().step(1 / 60f, 6, 2);
+		this.round.getBox2DWorld().step(1 / 300f, 6, 2);
 		this.round.update(delta);
 		Hero hero = this.round.getHero();
-		if(hero.getHasAMatchingCombination()){
+		if (hero.isOnPlatform()) {
 			WordChain word = hero.getLettersCollected();
-			int wordScore = this.scoreManager.score(word);
-			hero.addScore(wordScore);
+			boolean matchOccurred = languageController.match(word.convertToString());
+			
+			System.out.println(""+matchOccurred + ": " + word.convertToString());
+			if (matchOccurred) {
+				int wordScore = this.scoreManager.score(word);
+				hero.addScore(wordScore);
+			}
 			hero.reset();
+			int numberOfLettersToAdd = 10 - this.round.getLettersOnTheTable().size();
+			if (numberOfLettersToAdd > 0) {
+				createLetters(numberOfLettersToAdd);
+			}
 		}
 	}
 

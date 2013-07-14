@@ -1,9 +1,8 @@
 package com.monsterWords.model.couples;
 
-import com.badlogic.gdx.physics.box2d.World;
-import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
 import com.monsterWords.model.Round;
+import com.monsterWords.model.hero.Hero;
 
 public class HeroLetterCouple implements CoupleOfEntities {
 

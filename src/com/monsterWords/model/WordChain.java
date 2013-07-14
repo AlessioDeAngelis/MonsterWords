@@ -24,7 +24,7 @@ public class WordChain {
 		this.letterChain.add(letter);
 	}
 
-	public String toString() {
+	public String convertToString() {
 		String word = "";
 		for (Letter letter : letterChain) {
 			word += letter.getLetter();
