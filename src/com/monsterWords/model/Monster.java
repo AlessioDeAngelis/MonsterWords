@@ -24,6 +24,7 @@ public class Monster extends Entity {
 
 	}
 
+	@Override
 	public void update(float dt) {
 		Body body = this.getBody();
 		if (body != null) {
@@ -31,6 +32,11 @@ public class Monster extends Entity {
 			float bodyY = this.getY() / Constants.WORLD_SCALE;
 			body.setTransform(bodyX, bodyY, body.getAngle());
 		}
+	}
+
+	@Override
+	public String getTextureName() {
+		return "monster";
 	}
 
 }

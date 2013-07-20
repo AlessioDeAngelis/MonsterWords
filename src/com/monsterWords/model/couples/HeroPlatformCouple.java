@@ -19,6 +19,7 @@ public class HeroPlatformCouple implements CoupleOfEntities{
 	@Override
 	public void collisionHappened() {
 		this.hero.setOnPlatform(true);
+		this.checkingPlatform.setHeroOnPlatform(true);
 	}
 
 }

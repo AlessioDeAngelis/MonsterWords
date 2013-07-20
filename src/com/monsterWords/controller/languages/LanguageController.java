@@ -1,20 +1,16 @@
 package com.monsterWords.controller.languages;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import com.badlogic.gdx.utils.Array;
 import com.monsterWords.model.Language;
 import com.monsterWords.model.Letter;
 
+
 public abstract class LanguageController {
 	private Language language;
-	private Map<String, Letter> name2Letter;
-
 	public LanguageController() {
 		super();
 		this.language = new Language();
-		this.name2Letter = new HashMap<String, Letter>();
 //		/**
 //		 * The nextId is used to keep track of the id that must be assigned to
 //		 * the letter in order to be unique
@@ -34,20 +30,21 @@ public abstract class LanguageController {
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
-
-	public Map<String, Letter> getName2Letter() {
-		return name2Letter;
-	}
-
-	public void setName2Letter(Map<String, Letter> name2Letter) {
-		this.name2Letter = name2Letter;
-	}
 	
 	public boolean match(String word){
-		return this.language.getDictionary().contains(word);
+		return this.language.getDictionary().contains(word, false);
 	}
 
 	public abstract void initializeLanguage();
-	public abstract List<Letter> giveACombination(float numberOfLetter);
+	
+	public Array<Letter> giveACombination(float numberOfLetters) {
+		Array<Letter> combination = new Array<Letter>();
+		Array<Letter> lettersAvailable = this.getLanguage().getLettersAvailable();
+		lettersAvailable.shuffle();
+		for (int i = 0; i < numberOfLetters; i++) {
+			combination.add(lettersAvailable.get(i));
+		}
+		return combination;
+	}
 
 }

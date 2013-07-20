@@ -1,12 +1,9 @@
 package com.monsterWords.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.monsterWords.controller.languages.LanguageController;
-import com.monsterWords.utils.Constants;
 
 public class WordListParser {
 
@@ -27,8 +24,8 @@ public class WordListParser {
 		return SingletonHolder.INSTANCE;
 	}
 
-	public List<String> parse(LanguageController languageController) {
-		List<String> words = new ArrayList<String>();
+	public Array<String> parse(LanguageController languageController) {
+		Array<String> words = new Array<String>();
 		FileHandle file = Gdx.files.internal(languageController.getLanguage().getDictionaryPath());
 		String stringa = file.readString();// read the string
 		String[] splits = stringa.split("\n");

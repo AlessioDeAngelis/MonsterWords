@@ -1,7 +1,5 @@
 package com.monsterWords.model.hero;
 
-import com.badlogic.gdx.Gdx;
-
 public class MoveHeroState extends HeroState {
 	private int frameNumber;
 	private String[] frameNames;
@@ -24,12 +22,15 @@ public class MoveHeroState extends HeroState {
 
 	@Override
 	public void update(float dt) {
-		int index = frameNumber % frameNames.length;
-		this.setFrameName(this.frameNames[index]);
 		timeElapsed += dt;
-		if (timeElapsed > 0.1f) {//0.1 for desktop, dekstop less, like 0.05
+		if (timeElapsed > 0.3f) {//0.1 for desktop, dekstop less, like 0.05
 			frameNumber++;
 			timeElapsed = 0;
-		}
+		}		
+	}
+	
+	@Override
+	public String getFrameName(){
+		return this.frameNames[frameNumber % frameNames.length];
 	}
 }

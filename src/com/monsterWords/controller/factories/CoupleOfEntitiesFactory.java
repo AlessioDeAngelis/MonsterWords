@@ -12,6 +12,7 @@ import com.monsterWords.model.couples.HeroMonsterCouple;
 import com.monsterWords.model.couples.HeroPlatformCouple;
 import com.monsterWords.model.couples.LetterLetterCouple;
 import com.monsterWords.model.hero.Hero;
+import com.monsterWords.view.MusicPlayer;
 
 public class CoupleOfEntitiesFactory {
 

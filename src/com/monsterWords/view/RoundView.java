@@ -1,23 +1,20 @@
 package com.monsterWords.view;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.monsterWords.model.Letter;
+import com.badlogic.gdx.utils.Array;
+import com.monsterWords.model.Entity;
 import com.monsterWords.model.Round;
 import com.monsterWords.model.Wall;
-import com.monsterWords.model.hero.Hero;
 import com.monsterWords.utils.Constants;
 
 public class RoundView {
@@ -39,9 +36,11 @@ public class RoundView {
 	private float ppuY; // pixels per unit on the Y axis
 
 	private Round round;
+	private BitmapFont font;
 
 	public RoundView(Round round) {
 		this.round = round;
+		this.font =  new BitmapFont();
 		this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
 		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
@@ -80,99 +79,153 @@ public class RoundView {
 		this.name2texture.put("left", new Texture(Gdx.files.internal("model/hero/left.png")));
 		this.name2texture.put("left2", new Texture(Gdx.files.internal("model/hero/left2.png")));
 		this.name2texture.put("left4", new Texture(Gdx.files.internal("model/hero/left4.png")));
-		
-//		this.name2texture.put("a", new Texture(Gdx.files.internal("letters/a.png")));
 
+		// this.name2texture.put("a", new
+		// Texture(Gdx.files.internal("letters/a.png")));
+		this.name2texture.put("empty",  new Texture(Gdx.files.internal("model/empty.png")));
 		/**
-		 * Letters 
+		 * Letters
 		 * */
-		for(int i = 97; i < 97 + 26; i++){//i is the ascii value
+		for (int i = 97; i < 97 + 26; i++) {// i is the ascii value
 			char letter = (char) i;
-			String letterString = ""+letter;
-			this.name2texture.put(letterString, new Texture(Gdx.files.internal("letters/"+letterString+".png")));
+			String letterString = "" + letter;
+			this.name2texture.put(letterString, new Texture(Gdx.files.internal("letters/" + letterString + ".png")));
 		}
 		
 		/**
+		 * Platform
+		 * */
+		this.name2texture.put("platformNORMAL", new Texture(Gdx.files.internal("model/platform/platformNORMAL.png")));
+		this.name2texture.put("platformOK", new Texture(Gdx.files.internal("model/platform/platformOK.png")));
+		this.name2texture.put("platformWRONG", new Texture(Gdx.files.internal("model/platform/platformWRONG.png")));
+
+
+		/**
 		 * Walls
 		 * */
-		this.name2texture.put("wallLeft", new Texture(Gdx.files.internal("model/wall/wall_left.png")));
-		this.name2texture.put("wallFront", new Texture(Gdx.files.internal("model/wall/wall_front.png")));
-		
+		// this.name2texture.put("wallLeft", new
+		// Texture(Gdx.files.internal("model/wall/wall_left.png")));
+		// this.name2texture.put("wallFront", new
+		// Texture(Gdx.files.internal("model/wall/wall_front.png")));
+
 		/**
 		 * Background
 		 * */
-		this.name2texture.put("background", new Texture(Gdx.files.internal("model/background.jpg")));
-		
+		this.name2texture.put("background", new Texture(Gdx.files.internal("model/background.png")));
+		this.name2texture.put("bar", new Texture(Gdx.files.internal("model/bar.png")));
+
 		/**
 		 * Apply filters
 		 * */
-//		for(Texture texture : this.name2texture.values()){
-//			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		}
-		
+		// for(Texture texture : this.name2texture.values()){
+		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		// }
+
 	}
 
 	public void render() {
 
 		spriteBatch.begin();
 		renderBackground();
-		
+		renderBar();
+		renderBodies();
+		 renderText();
+		spriteBatch.end();
+		this.debugRenderer.render(this.round.getBox2DWorld(), cam.combined);
+		// this.debugRenderer.setDrawVelocities(true);
+	}
+
+	private void renderBar() {
+		spriteBatch.draw(this.name2texture.get("bar"),0, Gdx.graphics.getHeight()-Constants.TOP_BAR_TICKNESS);
+	}
+
+	private void renderBodies() {
 		if (this.round != null) {
-			Iterator<Body> bodies = this.round.getBox2DWorld().getBodies();
-			while (bodies.hasNext()) {
-				Body body = bodies.next();
+			Array<Body> bodies = new Array<Body>();
+			this.round.getBox2DWorld().getBodies(bodies);
+			for (Body body : bodies) {
 				Object userData = body.getUserData();
-				if (userData != null && Letter.class.isAssignableFrom(userData.getClass())) {
-					Letter letter = (Letter)userData;
-					String letterString = ""+letter.getLetter();
-					Texture texLetter = this.name2texture.get(letterString);//comment for testin
-//					Texture texLetter = this.name2texture.get("a");
-
-					Sprite letterSprite = new Sprite(texLetter);
-					// letterSprite.setSize(10*WORLD_SCALE, 10*WORLD_SCALE);
-					letterSprite.setX(body.getPosition().x * WORLD_SCALE);
-					letterSprite.setY(body.getPosition().y * WORLD_SCALE);
-//					letterSprite.setRotation((float) Math.toDegrees(body.getAngle()));
-					letterSprite.draw(spriteBatch);
-					// spriteBatch.draw(textureLetter, body.getPosition().x
-					// * WORLD_SCALE, body.getPosition().y * WORLD_SCALE);
-				}
-				if (userData != null && Hero.class.isAssignableFrom(userData.getClass())) {
-					String heroState = this.round.getHero().getState().getFrameName();
-					Sprite heroSprite = new Sprite(this.name2texture.get(heroState));
-//					Sprite heroSprite = new Sprite(this.name2texture.get("back"));//for testing
-
-					// letterSprite.setSize(10*WORLD_SCALE, 10*WORLD_SCALE);
-					heroSprite.setX(body.getPosition().x * WORLD_SCALE);
-					heroSprite.setY(body.getPosition().y * WORLD_SCALE);
-					heroSprite.setScale(1f);
-					heroSprite.draw(spriteBatch);
-				}
-				if (userData != null && Wall.class.isAssignableFrom(userData.getClass())) {
-					Wall wall = (Wall)userData;
-					Sprite wallSprite = new Sprite(this.name2texture.get(wall.getType()));
-					// letterSprite.setSize(10*WORLD_SCALE, 10*WORLD_SCALE);
-					wallSprite.setX(body.getPosition().x);
-					wallSprite.setY(body.getPosition().y);
-//					wallSprite.draw(spriteBatch);
+				if (userData != null && Entity.class.isAssignableFrom(userData.getClass())&& !(Wall.class.isAssignableFrom(userData.getClass()))) {
+					Entity entity = (Entity) userData;
+					String letterString = entity.getTextureName();
+//					 letterSprite.setRotation((float)
+//					 Math.toDegrees(body.getAngle()));
+					spriteBatch.draw(this.name2texture.get(letterString), body.getPosition().x * WORLD_SCALE,
+							body.getPosition().y * WORLD_SCALE);
 				}
 			}
 		}
-		renderText();
-		spriteBatch.end();
-//		this.debugRenderer.render(this.round.getBox2DWorld(), cam.combined);
-//		this.debugRenderer.setDrawVelocities(true);
 	}
 
+	// private void renderBodiesBackup(){
+	// if (this.round != null) {
+	// Iterator<Body> bodies = this.round.getBox2DWorld().getBodies();
+	// while (bodies.hasNext()) {
+	// Body body = bodies.next();
+	// Object userData = body.getUserData();
+	// if (userData != null &&
+	// Letter.class.isAssignableFrom(userData.getClass())) {
+	// Letter letter = (Letter)userData;
+	// String letterString = ""+letter.getLetter();
+	// Texture texLetter = this.name2texture.get(letterString);//comment for
+	// testin
+	// // Texture texLetter = this.name2texture.get("a");
+	//
+	// Sprite letterSprite = new Sprite(texLetter);
+	// // letterSprite.setSize(10*WORLD_SCALE, 10*WORLD_SCALE);
+	// letterSprite.setX(body.getPosition().x * WORLD_SCALE);
+	// letterSprite.setY(body.getPosition().y * WORLD_SCALE);
+	// // letterSprite.setRotation((float) Math.toDegrees(body.getAngle()));
+	// letterSprite.draw(spriteBatch);
+	// // spriteBatch.draw(textureLetter, body.getPosition().x
+	// // * WORLD_SCALE, body.getPosition().y * WORLD_SCALE);
+	// }
+	// if (userData != null && Hero.class.isAssignableFrom(userData.getClass()))
+	// {
+	// String heroState = this.round.getHero().getState().getFrameName();
+	// Sprite heroSprite = new Sprite(this.name2texture.get(heroState));
+	// // Sprite heroSprite = new Sprite(this.name2texture.get("back"));//for
+	// testing
+	//
+	// // letterSprite.setSize(10*WORLD_SCALE, 10*WORLD_SCALE);
+	// heroSprite.setX(body.getPosition().x * WORLD_SCALE);
+	// heroSprite.setY(body.getPosition().y * WORLD_SCALE);
+	// heroSprite.setScale(1f);
+	// heroSprite.draw(spriteBatch);
+	// }
+	// if (userData != null && Wall.class.isAssignableFrom(userData.getClass()))
+	// {
+	// Wall wall = (Wall)userData;
+	// Sprite wallSprite = new Sprite(this.name2texture.get(wall.getType()));
+	// // letterSprite.setSize(10*WORLD_SCALE, 10*WORLD_SCALE);
+	// wallSprite.setX(body.getPosition().x);
+	// wallSprite.setY(body.getPosition().y);
+	// // wallSprite.draw(spriteBatch);
+	// }
+	// }
+	// }
+	// }
+
 	private void renderBackground() {
-		spriteBatch.draw(this.name2texture.get("background"),0,0);
+		spriteBatch.draw(this.name2texture.get("background"),0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	public void renderText() {
-		BitmapFont font = new BitmapFont();
-		CharSequence str = this.round.getHero().getLettersCollected().convertToString();
-		font.draw(spriteBatch, str, 100, 100);
-		str = "" + this.round.getHero().getTotalScore();
-		font.draw(spriteBatch, str, 100, 500);
-	}	
+		float y = Gdx.graphics.getHeight() - Constants.TOP_BAR_TICKNESS + 30;
+		CharSequence str = this.round.getHero().getLettersCollected().convertToString().toUpperCase();
+		font.draw(spriteBatch, str, Gdx.graphics.getWidth()/2,  y);
+		str = ""+this.round.getHero().getTotalScore();
+		font.draw(spriteBatch, str, Gdx.graphics.getWidth()-100,y);
+		str = ""+(int)this.round.getTimer().getTimeLeft();
+		font.draw(spriteBatch, str,100, y);
+
+	}
+	
+	public void dispose(){
+		this.font.dispose();
+		for(Texture texture : this.name2texture.values()){
+			texture.dispose();
+		}
+		spriteBatch.dispose();
+	}
 }

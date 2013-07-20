@@ -15,7 +15,7 @@ public class Hero extends Entity {
 
 	public Hero() {
 		super();
-		this.setSpeedValue(5f);
+		this.setSpeedValue(10);
 		this.lettersCollected = new WordChain();
 		this.isOnPlatform = false;
 		this.totalScore = 0;
@@ -85,5 +85,10 @@ public class Hero extends Entity {
 	public void reset(){
 		this.lettersCollected = new WordChain();
 		this.isOnPlatform = false;
+	}
+
+	@Override
+	public String getTextureName() {
+		return this.getState().getFrameName();
 	}
 }

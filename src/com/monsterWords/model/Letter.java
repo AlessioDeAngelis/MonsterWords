@@ -63,4 +63,9 @@ public class Letter extends Entity {
 	public void collisionHappened() {
 
 	}
+
+	@Override
+	public String getTextureName() {
+		return ""+this.letter;
+	}
 }

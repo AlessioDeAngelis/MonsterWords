@@ -21,4 +21,9 @@ public class Wall extends Entity {
 
 	}
 
+	@Override
+	public String getTextureName() {
+		return "wall";
+	}
+
 }

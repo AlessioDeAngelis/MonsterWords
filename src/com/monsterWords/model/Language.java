@@ -1,39 +1,37 @@
 package com.monsterWords.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
 
 public class Language {
 	/**
 	 * Letters available in the language, following a certain distribution
 	 * **/
-	private List<Letter> lettersAvailable;
+	private Array<Letter> lettersAvailable;
 	/**
 	 * Dictionary of all the correct terms of the language
 	 * */
-	private List<String> dictionary;
+	private Array<String> dictionary;
 	private String dictionaryPath;
 
 	public Language() {
-		this.lettersAvailable = new ArrayList<Letter>();
-		this.dictionary = new ArrayList<String>();
+		this.lettersAvailable = new Array<Letter>();
+		this.dictionary = new Array<String>();
 		this.dictionaryPath = "";
 	}
 
-	public List<Letter> getLettersAvailable() {
+	public Array<Letter> getLettersAvailable() {
 		return lettersAvailable;
 	}
 
-	public void setLettersAvailable(List<Letter> lettersAvailable) {
+	public void setLettersAvailable(Array<Letter> lettersAvailable) {
 		this.lettersAvailable = lettersAvailable;
 	}
 
-	public List<String> getDictionary() {
+	public Array<String> getDictionary() {
 		return dictionary;
 	}
 
-	public void setDictionary(List<String> dictionary) {
+	public void setDictionary(Array<String> dictionary) {
 		this.dictionary = dictionary;
 	}
 
@@ -46,6 +44,6 @@ public class Language {
 	}
 
 	public void shuffleLetters() {
-		Collections.shuffle(this.lettersAvailable);
+		this.lettersAvailable.shuffle();
 	}
 }
