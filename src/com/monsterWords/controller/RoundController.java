@@ -29,12 +29,12 @@ public class RoundController {
 	private LanguageController languageController;
 	private HeroController heroController;
 
-	public RoundController(Round round, HeroController heroController) {
+	public RoundController(Round round, HeroController heroController, LanguageController languageController) {
 		super();
 		this.round = round;
 		this.scoreManager = new ScoreManager();
 		this.heroController = heroController;
-		this.languageController = new ItalianLanguageController();//TODO: add factory
+		this.languageController = languageController;
 	}
 	
 	
@@ -125,8 +125,8 @@ public class RoundController {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		// Set its world position
-		bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE, Math.round(Math.random() * 440 + 20)
-				/ WORLD_SCALE); // Create a body from the defintion and add it
+		bodyDef.position.set(Math.round(200) / WORLD_SCALE, Math.round(200/WORLD_SCALE)
+				); // Create a body from the defintion and add it
 								// to the world
 		Body heroBody = this.round.getBox2DWorld().createBody(bodyDef);
 
@@ -144,6 +144,7 @@ public class RoundController {
 		// Clean up after ourselves
 		heroBox.dispose();
 		Hero hero = new Hero();
+		hero.setPosition(200, 200);
 		hero.setBody(heroBody);
 		heroBody.setUserData(hero);
 		this.round.setHero(hero);

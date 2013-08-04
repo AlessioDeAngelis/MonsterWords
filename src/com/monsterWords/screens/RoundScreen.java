@@ -6,6 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.monsterWords.controller.HeroController;
 import com.monsterWords.controller.RoundController;
+import com.monsterWords.controller.factories.LanguageControllerFactory;
+import com.monsterWords.controller.languages.ItalianLanguageController;
+import com.monsterWords.controller.languages.LanguageController;
 import com.monsterWords.model.Round;
 import com.monsterWords.view.MusicPlayer;
 import com.monsterWords.view.RoundView;
@@ -13,18 +16,21 @@ import com.monsterWords.view.RoundView;
 public class RoundScreen implements Screen {
 
 	private Round round;
+	private String languageName;
 	private RoundController roundController;
 	private RoundView roundView;
 	private HeroController heroController;
 	private Game game;
-	public RoundScreen(Game game){
+	public RoundScreen(Game game, String languageName){
 		this.game = game;
+		this.languageName = languageName;
 	}
 
 	@Override
 	public void show() {
 		this.round = new Round();
-		this.roundController = new RoundController(round,null);
+		LanguageController languageController = LanguageControllerFactory.getInstance().createLanguageController(languageName);
+		this.roundController = new RoundController(round,null, languageController);
 		MusicPlayer.getInstance().playSoundtrack();
 		this.roundView = new RoundView(this.round);
 		this.roundController.populateWorld();

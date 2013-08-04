@@ -11,12 +11,14 @@ import com.monsterWords.model.hero.MoveDown;
 import com.monsterWords.model.hero.MoveLeft;
 import com.monsterWords.model.hero.MoveRight;
 import com.monsterWords.model.hero.MoveUp;
+import com.monsterWords.utils.Constants;
 
 public class HeroController implements InputProcessor {
 	private Hero hero;
 	private Vector2 touchPoint;
 	private float startingOrientation;
 	private HeroState[] heroStates;
+
 	public HeroController(Hero hero) {
 		this.hero = hero;
 		Gdx.input.setInputProcessor(this);
@@ -26,20 +28,20 @@ public class HeroController implements InputProcessor {
 		MoveLeft moveLeft = new MoveLeft();
 		MoveUp moveUp = new MoveUp();
 		MoveDown moveDown = new MoveDown();
-		this.heroStates = new HeroState[]{moveRight,moveLeft,moveUp,moveDown};
+		this.heroStates = new HeroState[] { moveRight, moveLeft, moveUp, moveDown };
 	}
-	
-	public Hero getHero(){
+
+	public Hero getHero() {
 		return this.hero;
 	}
-	
-	public void update(float dt){
+
+	public void update(float dt) {
 		if (Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)) {
-			 updateHeroAccelerometer();
+			updateHeroAccelerometer();
 		}
 		hero.update(dt);
 	}
-	
+
 	@Override
 	public boolean keyDown(int keycode) {
 		float speed = hero.getSpeedValue();
@@ -92,25 +94,26 @@ public class HeroController implements InputProcessor {
 				hero.translateY(speed);
 			}
 		}
-		
-//		if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) - hero.getOriginY()) {
-			if (screenX < hero.getX()) {
-//				hero.setState(new MoveLeft());
-				hero.translateX(-speed);
-			} else {
-//				hero.setState(new MoveRight());
-				hero.translateX(speed);
-			}
-//		} else {
-			if (screenY < hero.getY()) {
-//				hero.setState(new MoveDown());
-				hero.translateY(speed);
-			} else {
-//				hero.setState(new MoveUp());
-				hero.translateY(-speed);
-//			}
+
+		// if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) -
+		// hero.getOriginY()) {
+		if (screenX < hero.getX()) {
+			// hero.setState(new MoveLeft());
+			hero.translateX(-speed);
+		} else {
+			// hero.setState(new MoveRight());
+			hero.translateX(speed);
 		}
-		
+		// } else {
+		if (screenY < hero.getY()) {
+			// hero.setState(new MoveDown());
+			hero.translateY(speed);
+		} else {
+			// hero.setState(new MoveUp());
+			hero.translateY(-speed);
+			// }
+		}
+
 		return false;
 	}
 
@@ -151,10 +154,10 @@ public class HeroController implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
-	
+
 	public void updateHeroAccelerometer() {
 		// in landscape mode the axis are inverted
-		float translationXFactor = Gdx.input.getAccelerometerY() * hero.getSpeedValue() *4f;
+		float translationXFactor = Gdx.input.getAccelerometerY() * hero.getSpeedValue() * 4f;
 		float translationYFactor = Gdx.input.getAccelerometerX() * hero.getSpeedValue() * 4f;
 		translationXFactor *= Gdx.graphics.getDeltaTime();// if you don't want
 															// continuous
@@ -165,35 +168,41 @@ public class HeroController implements InputProcessor {
 		System.out.println("X: " + translationXFactor + "Y: " + translationYFactor);
 
 		float newX = hero.getX() + translationXFactor;
-		if (newX >= 0) {
+		if (newX < 0) {
 			hero.setX(newX);
-		} else if (newX + hero.getWidth() > Gdx.graphics.getWidth()) {
-			newX = Gdx.graphics.getWidth() - hero.getWidth();
+		} else if (newX + hero.getWidth() > Gdx.graphics.getWidth()-30) {
+			newX = Gdx.graphics.getWidth() - hero.getWidth() - 30;
+			newX = hero.getX();
+			hero.setX(newX);
+		}else{
 			hero.setX(newX);
 		}
 
+
 		float newY = hero.getY() - translationYFactor;
-		if (newY >= 0) {
+		if (newY < 0) {
 			hero.setY(newY);
-		} else if (newY + hero.getHeight() > Gdx.graphics.getHeight()) {
-			newY = Gdx.graphics.getHeight() - hero.getHeight();
+		} else if (newY + hero.getHeight() > Gdx.graphics.getHeight()-Constants.TOP_BAR_TICKNESS*2) {
+			newY = Gdx.graphics.getHeight() - hero.getHeight() -Constants.TOP_BAR_TICKNESS*2;
+			hero.setY(newY);
+		}else{
 			hero.setY(newY);
 		}
-		
+
 		/**
 		 * To check which direction the hero is facing
 		 * */
-		if(Math.abs(translationXFactor)>Math.abs(translationYFactor)){
-			if(translationXFactor>0){
-				hero.setState(this.heroStates[0]);//moveRight
-			}else{
-				hero.setState(this.heroStates[1]);//moveLeft
+		if (Math.abs(translationXFactor) > Math.abs(translationYFactor)) {
+			if (translationXFactor > 0) {
+				hero.setState(this.heroStates[0]);// moveRight
+			} else {
+				hero.setState(this.heroStates[1]);// moveLeft
 			}
-		}else{
-			if(translationYFactor<0){
-				hero.setState(this.heroStates[2]);//moveUp
-			}else{
-				hero.setState(this.heroStates[3]);//moveDown
+		} else {
+			if (translationYFactor < 0) {
+				hero.setState(this.heroStates[2]);// moveUp
+			} else {
+				hero.setState(this.heroStates[3]);// moveDown
 			}
 		}
 	}

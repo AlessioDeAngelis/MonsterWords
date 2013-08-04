@@ -69,6 +69,11 @@ public class Hero extends Entity {
 
 	@Override
 	public void update(float dt) {
+		if(this.getX()<0){
+			this.setPosition(0,this.getY());
+		}if(this.getY()<0){
+			this.setPosition(this.getX(), 0);
+		}
 		Body body = this.getBody();
 		if (body != null) {
 			float bodyX = this.getX() / Constants.WORLD_SCALE;

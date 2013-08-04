@@ -41,6 +41,8 @@ public class RoundView {
 	public RoundView(Round round) {
 		this.round = round;
 		this.font =  new BitmapFont();
+		this.font = new BitmapFont(Gdx.files.internal("fonts/monsterFont.fnt"),
+		         Gdx.files.internal("fonts/monsterFont.png"), false);
 		this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
 		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
@@ -129,7 +131,7 @@ public class RoundView {
 		renderBackground();
 		renderBar();
 		renderBodies();
-		 renderText();
+		renderText();
 		spriteBatch.end();
 		this.debugRenderer.render(this.round.getBox2DWorld(), cam.combined);
 		// this.debugRenderer.setDrawVelocities(true);
@@ -213,11 +215,13 @@ public class RoundView {
 	public void renderText() {
 		float y = Gdx.graphics.getHeight() - Constants.TOP_BAR_TICKNESS + 30;
 		CharSequence str = this.round.getHero().getLettersCollected().convertToString().toUpperCase();
-		font.draw(spriteBatch, str, Gdx.graphics.getWidth()/2,  y);
-		str = ""+this.round.getHero().getTotalScore();
-		font.draw(spriteBatch, str, Gdx.graphics.getWidth()-100,y);
-		str = ""+(int)this.round.getTimer().getTimeLeft();
-		font.draw(spriteBatch, str,100, y);
+		font.draw(spriteBatch, str, Gdx.graphics.getWidth() / 2 - 50, y);
+		str = "Score: "+this.round.getHero().getTotalScore();
+		font.draw(spriteBatch, str, Gdx.graphics.getWidth()-300,y);
+		str = "Time: "+(int)this.round.getTimer().getTimeLeft();
+		font.draw(spriteBatch, str,20, y);
+//		str = ""+(int)this.round.getHero().getX() + "," + this.round.getHero().getY();
+//		font.draw(spriteBatch, str,50, y);
 
 	}
 	
