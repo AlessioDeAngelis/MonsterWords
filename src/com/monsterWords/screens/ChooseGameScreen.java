@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
 import com.monsterWords.controller.factories.GameButtonFactory;
 import com.monsterWords.model.button.GameButton;
@@ -29,10 +30,15 @@ public class ChooseGameScreen implements Screen, InputProcessor {
 		this.buttons.add(gameButton);
 		gameButton = GameButtonFactory.getInstance().createGameButton("englishFlag", 600, 300, game);
 		this.buttons.add(gameButton);
+		gameButton = GameButtonFactory.getInstance().createGameButton("norwegianFlag", (600+450)/2, 200, game);
+		this.buttons.add(gameButton);
+		
 	}
 
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(0.56f, 0.165f, 0.1f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		this.chooseGameView.render(delta);
 	}
 

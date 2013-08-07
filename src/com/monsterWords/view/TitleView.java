@@ -1,5 +1,8 @@
 package com.monsterWords.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,40 +11,39 @@ import com.badlogic.gdx.utils.Array;
 import com.monsterWords.model.button.GameButton;
 
 public class TitleView {
-	private static final float CAMERA_WIDTH = Gdx.graphics.getWidth();
-	private static final float CAMERA_HEIGHT = Gdx.graphics.getHeight();
-	private Texture background;
 	private SpriteBatch spriteBatch;
 	private Array<GameButton> buttons;
-	private BitmapFont font;
+	private Map<String,Texture> name2texture;
 
 	public TitleView(Array<GameButton> buttons) {
-		this.buttons = buttons;
-		this.background = new Texture(Gdx.files.internal("model/titleScreen.png"));
+		this.buttons = buttons;	
+		loadTextures();
 		this.spriteBatch = new SpriteBatch();
-		this.font =  new BitmapFont();
-		this.font = new BitmapFont(Gdx.files.internal("fonts/monsterFont.fnt"),
-		         Gdx.files.internal("fonts/monsterFont.png"), false);
+	}
+
+	private void loadTextures() {
+		this.name2texture = new HashMap<String, Texture>();
+		String name = "";
+		for (GameButton button : buttons) {
+			name = button.getName();
+			this.name2texture.put(name, new Texture(Gdx.files.internal("model/button/" + name + ".png")));
+		}
+		this.name2texture.put("background",new Texture(Gdx.files.internal("model/titleScreen.png")));
 	}
 
 	public void render(float delta) {
-		this.spriteBatch.begin();
-		this.spriteBatch.draw(background, 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
-		this.renderButtons();
-		this.spriteBatch.end();
-	}
-
-	private void renderButtons(){
-		CharSequence str = "";
+		spriteBatch.begin();
+		spriteBatch.draw(this.name2texture.get("background"),0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		for(GameButton gameButton : buttons){
-			str = gameButton.getName().toUpperCase();
-			font.draw(spriteBatch, str, gameButton.getX(),gameButton.getY());
+			spriteBatch.draw(this.name2texture.get(gameButton.getName()),gameButton.getX(),gameButton.getY());
 		}
-	}
+		spriteBatch.end();
+	}	
 	
 	public void dispose() {
-		this.background.dispose();
-		this.font.dispose();
+		for(Texture texture : name2texture.values()){
+			texture.dispose();
+		}
 		this.spriteBatch.dispose();
 	}
 }

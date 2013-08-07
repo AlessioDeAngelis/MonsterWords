@@ -94,21 +94,17 @@ public class RoundView {
 			this.name2texture.put(letterString, new Texture(Gdx.files.internal("letters/" + letterString + ".png")));
 		}
 		
+		//NORWEGIAN LETTERS
+		this.name2texture.put("æ",  new Texture(Gdx.files.internal("letters/ae.png")));
+		this.name2texture.put("ø",  new Texture(Gdx.files.internal("letters/oo.png")));
+		this.name2texture.put("å",  new Texture(Gdx.files.internal("letters/aa.png")));
+		
 		/**
 		 * Platform
 		 * */
 		this.name2texture.put("platformNORMAL", new Texture(Gdx.files.internal("model/platform/platformNORMAL.png")));
 		this.name2texture.put("platformOK", new Texture(Gdx.files.internal("model/platform/platformOK.png")));
 		this.name2texture.put("platformWRONG", new Texture(Gdx.files.internal("model/platform/platformWRONG.png")));
-
-
-		/**
-		 * Walls
-		 * */
-		// this.name2texture.put("wallLeft", new
-		// Texture(Gdx.files.internal("model/wall/wall_left.png")));
-		// this.name2texture.put("wallFront", new
-		// Texture(Gdx.files.internal("model/wall/wall_front.png")));
 
 		/**
 		 * Background
@@ -149,10 +145,10 @@ public class RoundView {
 				Object userData = body.getUserData();
 				if (userData != null && Entity.class.isAssignableFrom(userData.getClass())&& !(Wall.class.isAssignableFrom(userData.getClass()))) {
 					Entity entity = (Entity) userData;
-					String letterString = entity.getTextureName();
+					String textureName = entity.getTextureName();
 //					 letterSprite.setRotation((float)
 //					 Math.toDegrees(body.getAngle()));
-					spriteBatch.draw(this.name2texture.get(letterString), body.getPosition().x * WORLD_SCALE,
+					spriteBatch.draw(this.name2texture.get(textureName), body.getPosition().x * WORLD_SCALE,
 							body.getPosition().y * WORLD_SCALE);
 				}
 			}

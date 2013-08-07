@@ -91,14 +91,15 @@ public class Round {
 		for(Letter letter : this.lettersOnTheTable){
 			letter.setFlaggedForDelete(true);
 		}
+		checkForBodiesToDelete();//added, maybe is useless
 		this.lettersOnTheTable.clear();
 	}
 
 	public void update(float dt) {
+		checkingPlatform.update(dt);
 		hero.update(dt);
 		monster.update(dt);
 		timer.update(dt);
-		checkingPlatform.update(dt);
 		checkForBodiesToDelete();
 	}
 

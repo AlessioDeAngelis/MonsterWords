@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Array;
 import com.monsterWords.controller.factories.GameButtonFactory;
 import com.monsterWords.model.button.GameButton;
@@ -30,14 +31,20 @@ public class TitleScreen implements Screen,InputProcessor{
 	}
 
 	private void initializeButtons() {
-		GameButton gameButton = GameButtonFactory.getInstance().createGameButton("play",Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-300, game);
+		GameButton gameButton = GameButtonFactory.getInstance().createGameButton("play",Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-100, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("credits", Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-500, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("credits", Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-200, game);
+		this.buttons.add(gameButton);
+		gameButton = GameButtonFactory.getInstance().createGameButton("highscore", Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-200, game);
+		this.buttons.add(gameButton);
+		gameButton = GameButtonFactory.getInstance().createGameButton("rules", Gdx.graphics.getWidth()-400, Gdx.graphics.getHeight()-200, game);
 		this.buttons.add(gameButton);
 	}
 
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(0.56f, 0.165f, 0.1f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		titleView.render(delta);
 	}
 
@@ -92,9 +99,9 @@ public class TitleScreen implements Screen,InputProcessor{
 			boolean inputIsInside = gameButton.getBoundingRectangle().contains(screenX,
 					Gdx.graphics.getHeight() - screenY);	
 			
-			 System.out.println(inputIsInside +
-						 ","+gameButton.getBoundingRectangle().toString() + "----" +screenX+","
-						 + (Gdx.graphics.getHeight() - screenY));
+//			 System.out.println(inputIsInside +
+//						 ","+gameButton.getBoundingRectangle().toString() + "----" +screenX+","
+//						 + (Gdx.graphics.getHeight() - screenY));
 			if (inputIsInside) {
 				gameButton.executeAction();
 			}

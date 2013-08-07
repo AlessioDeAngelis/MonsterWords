@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.monsterWords.controller.languages.ItalianLanguageController;
 import com.monsterWords.controller.languages.LanguageController;
 import com.monsterWords.model.CheckingPlatform;
+import com.monsterWords.model.CheckingPlatform.PlatformState;
 import com.monsterWords.model.Letter;
 import com.monsterWords.model.Monster;
 import com.monsterWords.model.Round;
@@ -36,29 +37,23 @@ public class RoundController {
 		this.heroController = heroController;
 		this.languageController = languageController;
 	}
-	
-	
 
 	public HeroController getHeroController() {
 		return heroController;
 	}
 
-
-
 	public void setHeroController(HeroController heroController) {
 		this.heroController = heroController;
 	}
-
-
 
 	public void populateWorld() {
 		setUpBox2D();
 	}
 
 	public void setUpBox2D() {
+		createHero();
 		createLetters(10);
 		createWalls();
-		createHero();
 		createPlatform();
 		createMonster();
 	}
@@ -88,7 +83,8 @@ public class RoundController {
 		monsterBox.dispose();
 		Monster monster = new Monster();
 		monster.setBody(monsterBody);
-//		monsterBody.setUserData(monster);//TODO: uncomment it if you need to render it
+		// monsterBody.setUserData(monster);//TODO: uncomment it if you need to
+		// render it
 		this.round.setMonster(monster);
 	}
 
@@ -97,12 +93,13 @@ public class RoundController {
 		BodyDef platformBodyDef = new BodyDef();
 		platformBodyDef.type = BodyType.StaticBody;
 		// Set its world position
-		platformBodyDef.position.set(new Vector2(Gdx.graphics.getWidth() / 2f / WORLD_SCALE, Gdx.graphics.getHeight()
-				/ 2f / WORLD_SCALE));
+		platformBodyDef.position.set(new Vector2(Gdx.graphics.getWidth() / 2f / WORLD_SCALE,
+				(Gdx.graphics.getHeight() - 100) / 2f / WORLD_SCALE));
 		// Create a body from the defintion and add it to the world
 		Body platformBody = this.round.getBox2DWorld().createBody(platformBodyDef);
 		CheckingPlatform checkingPlatform = new CheckingPlatform();
-		platformBody.setUserData(checkingPlatform);//TODO: uncomment it if you need to render it
+		platformBody.setUserData(checkingPlatform);// TODO: uncomment it if you
+													// need to render it
 		checkingPlatform.setBody(platformBody);
 		// Create a polygon shape
 		PolygonShape platformBox = new PolygonShape();
@@ -125,9 +122,18 @@ public class RoundController {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		// Set its world position
-		bodyDef.position.set(Math.round(200) / WORLD_SCALE, Math.round(200/WORLD_SCALE)
-				); // Create a body from the defintion and add it
-								// to the world
+		bodyDef.position.set(Math.round(200) / WORLD_SCALE, Math.round(200 / WORLD_SCALE)); // Create
+																							// a
+																							// body
+																							// from
+																							// the
+																							// defintion
+																							// and
+																							// add
+																							// it
+																							// to
+																							// the
+																							// world
 		Body heroBody = this.round.getBox2DWorld().createBody(bodyDef);
 
 		// Create a polygon shape
@@ -153,7 +159,7 @@ public class RoundController {
 	public void createLetters(int numberOfLetters) {
 		Array<Letter> letters = this.languageController.giveACombination(numberOfLetters);
 		letters.shuffle();
-		float circleSpeed = 10;//previous 50
+		float circleSpeed = 10;// previous 50
 		for (int i = 0; i < numberOfLetters; i++) {
 			// First we create a body definition
 			BodyDef bodyDef = new BodyDef();
@@ -162,8 +168,31 @@ public class RoundController {
 			// move we would set it to StaticBody
 			bodyDef.type = BodyType.DynamicBody;
 			// Set our body's starting position in the world
-			bodyDef.position.set(Math.round(Math.random() * 600 + 20) / WORLD_SCALE,
-					Math.round(Math.random() * 440 + 20) / WORLD_SCALE);
+//			float x = Math.round(Math.random() * Gdx.graphics.getWidth() +20);
+//			;
+//			float y = Math.round(Math.random() * Gdx.graphics.getHeight() +20-100);
+			float x = Math.round(Math.random() * 600 +100);
+			;
+			float y = Math.round(Math.random() * 400 + 100);
+			if (this.heroController != null && this.heroController.getHero() != null) {
+				while (this.heroController.getHero().getBoundingRectangle().contains(x, y)) { // to
+																								// avoid
+																								// that
+																								// a
+																								// letter
+																								// collides
+																								// with
+																								// the
+																								// hero
+																								// in
+																								// the
+																								// starting
+																								// position
+					x = Math.round(Math.random() * 600 +100 );
+					y = Math.round(Math.random() * 400 + 100);
+				}
+			}
+			bodyDef.position.set(x / WORLD_SCALE, y / WORLD_SCALE);
 			float randomAngle = (float) (2f * Math.random() * Math.PI);
 			bodyDef.angle = randomAngle;
 			// bodyDef.linearVelocity.set(0, -100000000000f);
@@ -173,7 +202,7 @@ public class RoundController {
 			float vx = (float) (circleSpeed * Math.cos(randomAngle));
 			float vy = (float) (circleSpeed * Math.sin(randomAngle));
 			body.setLinearVelocity(vx, vy);
-			body.setAngularVelocity(0.2f);//previous 0.5
+			body.setAngularVelocity(0.2f);// previous 0.5
 			Letter letter = letters.get(i);
 			body.setUserData(letter);
 			// Create a circle shape and set its radius to 6
@@ -199,11 +228,12 @@ public class RoundController {
 	private void createWalls() {
 		float tickness = 10f;
 		float epsilon = 0.0f;
-		addWall(epsilon, epsilon, epsilon, Gdx.graphics.getHeight(),"wallLeft");//left
-		addWall(epsilon, Gdx.graphics.getHeight() - epsilon - Constants.TOP_BAR_TICKNESS, Gdx.graphics.getWidth(), tickness+Constants.TOP_BAR_TICKNESS,"wallFront");//top
-		addWall(Gdx.graphics.getWidth() - epsilon-tickness, epsilon, tickness,
-				Gdx.graphics.getHeight()-epsilon,"wallLeft");//right
-		addWall(epsilon, epsilon, Gdx.graphics.getWidth(), epsilon,"wallFront");//down
+		addWall(epsilon, epsilon, epsilon, Gdx.graphics.getHeight(), "wallLeft");// left
+		addWall(epsilon, Gdx.graphics.getHeight() - epsilon - Constants.TOP_BAR_TICKNESS, Gdx.graphics.getWidth(),
+				tickness + Constants.TOP_BAR_TICKNESS, "wallFront");// top
+		addWall(Gdx.graphics.getWidth() - epsilon - tickness, epsilon, tickness, Gdx.graphics.getHeight() - epsilon,
+				"wallLeft");// right
+		addWall(epsilon, epsilon, Gdx.graphics.getWidth(), epsilon, "wallFront");// down
 
 	}
 
@@ -246,24 +276,30 @@ public class RoundController {
 		if (hero.isOnPlatform()) {
 			WordChain word = hero.getLettersCollected();
 			boolean matchOccurred = languageController.match(word.convertToString());
-			this.round.getCheckingPlatform().setWordMatchFound(!matchOccurred);
+			// this.round.getCheckingPlatform().setWordMatchFound(matchOccurred);
 			if (matchOccurred) {
 				int wordScore = this.scoreManager.score(word);
 				hero.addScore(wordScore);
-			}else{
+				this.round.getCheckingPlatform().setWordMatchFound(true);
+				this.round.getCheckingPlatform().setCurrentState(PlatformState.OK);
+				MusicPlayer.getInstance().playSoundCorrect();
+			} else {
 				MusicPlayer.getInstance().playSoundWrong();
+				this.round.getCheckingPlatform().setWordMatchFound(false);
+				this.round.getCheckingPlatform().setCurrentState(PlatformState.WRONG);
 			}
 			hero.reset();
 			int numberOfLettersToAdd = 10 - this.round.getLettersOnTheTable().size();
 			if (numberOfLettersToAdd > 0) {
-//				createLetters(numberOfLettersToAdd);
-				this.round.clearTable();//added 
-				createLetters(10);//let's try with 10 to let the game be more interesting;
+				// createLetters(numberOfLettersToAdd);
+				this.round.clearTable();// added
+				createLetters(10);// let's try with 10 to let the game be more
+									// interesting;
 			}
 		}
 	}
-	
-	public boolean isGameOver(){
+
+	public boolean isGameOver() {
 		return this.round.isRoundOver();
 	}
 

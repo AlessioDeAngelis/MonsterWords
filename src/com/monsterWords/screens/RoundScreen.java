@@ -43,7 +43,7 @@ public class RoundScreen implements Screen {
 		Gdx.gl.glClearColor(0.56f, 0.165f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if(roundController.isGameOver()){
-			this.game.setScreen(new GameOverScreen(game));
+			this.game.setScreen(new GameOverScreen(game,heroController.getHero().getTotalScore()));
 		}
 		heroController.update(delta);
 		roundController.update(delta);

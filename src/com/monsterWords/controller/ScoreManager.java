@@ -5,7 +5,7 @@ import com.monsterWords.model.WordChain;
 public class ScoreManager {
 	public int score(WordChain word) {
 		int score = 0;
-		int size = word.getLetterChain().size();
+		int size = word.getLetterChain().size;
 ;
 		if(size <= 3){
 			score += size; 

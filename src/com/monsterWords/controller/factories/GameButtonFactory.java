@@ -26,18 +26,22 @@ public class GameButtonFactory {
 		GameButton gameButton = null;
 		if (buttonName != null) {
 			if (buttonName.equals("italianFlag")) {
-				gameButton = new ItalianFlagButton(game,x,y,100,100);
-			}else if (buttonName.equals("englishFlag")) {
-				gameButton = new EnglishFlagButton(game,x,y,100,100);
-			}else if (buttonName.equals("norwegianFlag")) {
-				gameButton = new NorwegianFlagButton(game,x,y,100,100);
-			}else if (buttonName.equals("play")) {
-				gameButton = new PlayGameButton(game,x,y,100,100);
-			}else if (buttonName.equals("credits")) {
-				gameButton = new CreditsButton(game,x,y,100,100);
+				gameButton = new ItalianFlagButton(game, x, y, 100, 100);
+			} else if (buttonName.equals("englishFlag")) {
+				gameButton = new EnglishFlagButton(game, x, y, 100, 100);
+			} else if (buttonName.equals("norwegianFlag")) {
+				gameButton = new NorwegianFlagButton(game, x, y, 100, 100);
+			} else if (buttonName.equals("play")) {
+				gameButton = new PlayGameButton(game, x, y, 195, 60);
+			} else if (buttonName.equals("credits")) {
+				gameButton = new CreditsButton(game, x, y, 315, 60);// TODO: fix
+																	// size
+			} else if (buttonName.equals("highscore")) {
+				gameButton = new CreditsButton(game, x, y, 442, 60);// TODO: fix
+			} else if (buttonName.equals("rules")) {
+				gameButton = new CreditsButton(game, x, y, 245, 60);// TODO: fix
 			}
 		}
 		return gameButton;
 	}
-
 }

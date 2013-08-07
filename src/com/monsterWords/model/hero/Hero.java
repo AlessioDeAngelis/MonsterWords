@@ -15,7 +15,7 @@ public class Hero extends Entity {
 
 	public Hero() {
 		super();
-		this.setSpeedValue(10);
+		this.setSpeedValue(25);
 		this.lettersCollected = new WordChain();
 		this.isOnPlatform = false;
 		this.totalScore = 0;

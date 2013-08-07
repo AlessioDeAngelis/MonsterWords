@@ -20,18 +20,23 @@ public class MusicPlayer {
 	}
 
 	private Music soundtrack;
-	private Sound soundPop, soundWrong;
+	private Sound soundPop, soundWrong, soundCorrect;
 	private Sound[] sounds;
 
 	private MusicPlayer() {
 		this.soundPop = Gdx.audio.newSound(Gdx.files.internal("sound/pop.mp3"));
 		this.soundWrong = Gdx.audio.newSound(Gdx.files.internal("sound/wrong.mp3"));
 		this.soundtrack = Gdx.audio.newMusic(Gdx.files.internal("music/soundtrack.mp3"));
-		this.sounds = new Sound[] { soundPop, soundWrong };
+		this.soundCorrect = Gdx.audio.newSound(Gdx.files.internal("sound/correctAnswer.mp3"));
+		this.sounds = new Sound[] { soundPop, soundWrong, soundCorrect };
 	}
 
 	public void playSoundPop() {
 		this.soundPop.play(1);
+	}
+	
+	public void playSoundCorrect() {
+		this.soundCorrect.play(1);
 	}
 
 	public void playSoundWrong() {
@@ -41,6 +46,10 @@ public class MusicPlayer {
 	public void playSoundtrack(){
 		this.soundtrack.setLooping(true);
 		this.soundtrack.play();
+	}
+	
+	public void stopSoundtrack(){
+		this.soundtrack.stop();
 	}
 
 	public void dispose() {

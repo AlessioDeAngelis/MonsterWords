@@ -1,7 +1,7 @@
 package com.monsterWords.model.button;
 
 import com.badlogic.gdx.Game;
-import com.monsterWords.screens.ChooseGameScreen;
+import com.monsterWords.screens.CreditsScreen;
 
 public class CreditsButton extends GameButton{
 
@@ -12,7 +12,7 @@ public class CreditsButton extends GameButton{
 
 	@Override
 	public void executeAction() {
-		this.getGame().setScreen(new ChooseGameScreen(this.getGame()));
+		this.getGame().setScreen(new CreditsScreen(this.getGame()));
 	}
 
 }

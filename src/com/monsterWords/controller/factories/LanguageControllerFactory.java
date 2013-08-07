@@ -3,6 +3,7 @@ package com.monsterWords.controller.factories;
 import com.monsterWords.controller.languages.EnglishLanguageController;
 import com.monsterWords.controller.languages.ItalianLanguageController;
 import com.monsterWords.controller.languages.LanguageController;
+import com.monsterWords.controller.languages.NorwegianLanguageController;
 
 public class LanguageControllerFactory {
 
@@ -28,8 +29,9 @@ public class LanguageControllerFactory {
 		if (languageName != null) {
 			if (languageName.equals("italian")) {
 				languageController = new ItalianLanguageController();
+			} else if (languageName.equals("norwegian")) {
+				languageController = new NorwegianLanguageController();
 			}
-			//TODO: add norwegian
 		}
 		return languageController;
 	}
