@@ -1,23 +1,33 @@
-package com.monsterWords.model;
+package com.monsterWords.model.hero;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.monsterWords.model.Entity;
+import com.monsterWords.model.WordChain;
 import com.monsterWords.utils.Constants;
 
 public class Hero extends Entity {
 
 	private float speedValue;
-	private char letter;
 	private WordChain lettersCollected;
-	private boolean hasAMatchingCombination;
+	private boolean isOnPlatform;
 	private int totalScore;
+	private HeroState state;
 
 	public Hero() {
 		super();
-		this.setSpeedValue(50f);
-		this.letter = 'a';
+		this.setSpeedValue(25);
 		this.lettersCollected = new WordChain();
-		this.hasAMatchingCombination = false;
+		this.isOnPlatform = false;
 		this.totalScore = 0;
+		this.state = new MoveRight();
+	}
+
+	public HeroState getState() {
+		return state;
+	}
+
+	public void setState(HeroState currentState) {
+		this.state = currentState;
 	}
 
 	public int getTotalScore() {
@@ -26,22 +36,14 @@ public class Hero extends Entity {
 
 	public void setTotalScore(int totalScore) {
 		this.totalScore = totalScore;
+	}	
+
+	public boolean isOnPlatform() {
+		return isOnPlatform;
 	}
 
-	public boolean getHasAMatchingCombination() {
-		return hasAMatchingCombination;
-	}
-
-	public void setHasAMatchingCombination(boolean hasAMatchingCombination) {
-		this.hasAMatchingCombination = hasAMatchingCombination;
-	}
-
-	public char getLetter() {
-		return letter;
-	}
-
-	public void setLetter(char letter) {
-		this.letter = letter;
+	public void setOnPlatform(boolean isOnPlatform) {
+		this.isOnPlatform = isOnPlatform;
 	}
 
 	public float getSpeedValue() {
@@ -67,12 +69,18 @@ public class Hero extends Entity {
 
 	@Override
 	public void update(float dt) {
+		if(this.getX()<0){
+			this.setPosition(0,this.getY());
+		}if(this.getY()<0){
+			this.setPosition(this.getX(), 0);
+		}
 		Body body = this.getBody();
 		if (body != null) {
 			float bodyX = this.getX() / Constants.WORLD_SCALE;
 			float bodyY = this.getY() / Constants.WORLD_SCALE;
 			body.setTransform(bodyX, bodyY, body.getAngle());
 		}
+		this.state.update(dt);
 	}
 	
 	public void addScore(int score){
@@ -81,5 +89,11 @@ public class Hero extends Entity {
 	
 	public void reset(){
 		this.lettersCollected = new WordChain();
+		this.isOnPlatform = false;
+	}
+
+	@Override
+	public String getTextureName() {
+		return this.getState().getFrameName();
 	}
 }

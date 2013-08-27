@@ -1,9 +1,9 @@
 package com.monsterWords.model.couples;
 
-import com.badlogic.gdx.physics.box2d.World;
-import com.monsterWords.model.Hero;
 import com.monsterWords.model.Letter;
 import com.monsterWords.model.Round;
+import com.monsterWords.model.hero.Hero;
+import com.monsterWords.view.MusicPlayer;
 
 public class HeroLetterCouple implements CoupleOfEntities {
 
@@ -25,6 +25,7 @@ public class HeroLetterCouple implements CoupleOfEntities {
 		//the letter is removed from the screen, together with the body
 		this.letter.setFlaggedForDelete(true);
 		this.currentRound.removeLetter(letter);
+		MusicPlayer.getInstance().playSoundPop();
 	}
 
 }

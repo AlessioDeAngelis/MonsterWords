@@ -41,6 +41,8 @@ public abstract class Entity extends Sprite {
 	 * **/
 	public abstract void collisionHappened();
 
+	public abstract String getTextureName();
+	
 	public void update(float dt) {
 		
 	}

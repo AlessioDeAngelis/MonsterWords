@@ -1,19 +1,14 @@
 package com.monsterWords.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.monsterWords.utils.Constants;
+import com.badlogic.gdx.utils.Array;
+import com.monsterWords.controller.languages.LanguageController;
 
-public class WordListMatcher {
-
-	private List<String> allWords;
+public class WordListParser {
 
 	// Private constructor prevents instantiation from other classes
-	private WordListMatcher() {
-		this.allWords = parse(null);
+	private WordListParser() {
 	}
 
 	/**
@@ -22,25 +17,23 @@ public class WordListMatcher {
 	 * not before.
 	 */
 	private static class SingletonHolder {
-		public static final WordListMatcher INSTANCE = new WordListMatcher();
+		public static final WordListParser INSTANCE = new WordListParser();
 	}
 
-	public static WordListMatcher getInstance() {
+	public static WordListParser getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
 
-	public List<String> parse(String txtPath) {
-		List<String> words = new ArrayList<String>();
-		FileHandle file = Gdx.files.internal(Constants.ENGLISH_WORD_LIST_PATH);
+	public Array<String> parse(LanguageController languageController) {
+		Array<String> words = new Array<String>();
+		FileHandle file = Gdx.files.internal(languageController.getLanguage().getDictionaryPath());
 		String stringa = file.readString();// read the string
 		String[] splits = stringa.split("\n");
 		for (int i = 0; i < splits.length; i++) {
 			words.add(splits[i].trim());
 		}
+		languageController.getLanguage().setDictionary(words);
 		return words;
-	}
-	
-	public boolean match(String word){
-		return this.allWords.contains(word);
-	}
+	}	
+
 }

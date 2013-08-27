@@ -1,12 +1,21 @@
 package com.monsterWords.model;
 
-public class Letter extends Entity{
-	
-	//TODO: implement hash code and equals for the correct remove
+import java.util.Random;
+
+public class Letter extends Entity {
+
 	private char letter;
 	private float id;
-	public Letter(){
-		this.letter = 'a';
+
+	public Letter() {
+		Random random = new Random();
+		int asciiValue = random.nextInt(26) + 97;
+		this.letter = (char) asciiValue;
+	}
+	
+	public Letter(char letter, float id){
+		this.letter = letter;
+		this.id = id;
 	}
 
 	public char getLetter() {
@@ -15,7 +24,7 @@ public class Letter extends Entity{
 
 	public void setLetter(char letter) {
 		this.letter = letter;
-	}	
+	}
 
 	public float getId() {
 		return id;
@@ -23,7 +32,7 @@ public class Letter extends Entity{
 
 	public void setId(float id) {
 		this.id = id;
-	}	
+	}
 
 	@Override
 	public int hashCode() {
@@ -52,6 +61,11 @@ public class Letter extends Entity{
 
 	@Override
 	public void collisionHappened() {
-		
-	}	
+
+	}
+
+	@Override
+	public String getTextureName() {
+		return ""+this.letter;
+	}
 }

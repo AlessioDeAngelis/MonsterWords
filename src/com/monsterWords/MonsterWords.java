@@ -1,14 +1,11 @@
 package com.monsterWords;
 
-import java.util.List;
-
 import com.badlogic.gdx.Game;
-import com.monsterWords.controller.WordListMatcher;
-import com.monsterWords.screens.RoundScreen;
+import com.monsterWords.screens.TitleScreen;
 
 public class MonsterWords extends Game {
 	@Override
 	public void create() {
-		this.setScreen(new RoundScreen());
+		this.setScreen(new TitleScreen(this));
 	}
 }

@@ -1,40 +1,51 @@
 package com.monsterWords.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.graphics.GL20;
+import com.monsterWords.controller.HeroController;
 import com.monsterWords.controller.RoundController;
-import com.monsterWords.model.Hero;
+import com.monsterWords.controller.factories.LanguageControllerFactory;
+import com.monsterWords.controller.languages.ItalianLanguageController;
+import com.monsterWords.controller.languages.LanguageController;
 import com.monsterWords.model.Round;
-import com.monsterWords.utils.Constants;
+import com.monsterWords.view.MusicPlayer;
 import com.monsterWords.view.RoundView;
 
-public class RoundScreen implements Screen, InputProcessor {
+public class RoundScreen implements Screen {
 
 	private Round round;
+	private String languageName;
 	private RoundController roundController;
 	private RoundView roundView;
-	private World box2dWorld;
-	private Body body;
-	private static final float WORLD_SCALE = Constants.WORLD_SCALE;
+	private HeroController heroController;
+	private Game game;
+	public RoundScreen(Game game, String languageName){
+		this.game = game;
+		this.languageName = languageName;
+	}
 
 	@Override
 	public void show() {
 		this.round = new Round();
-		this.roundController = new RoundController(round);
+		LanguageController languageController = LanguageControllerFactory.getInstance().createLanguageController(languageName);
+		this.roundController = new RoundController(round,null, languageController);
+		MusicPlayer.getInstance().playSoundtrack();
 		this.roundView = new RoundView(this.round);
-		Gdx.input.setInputProcessor(this);
 		this.roundController.populateWorld();
+		this.heroController = new HeroController(this.round.getHero());
+		this.roundController.setHeroController(heroController);
 	}
 
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.56f, 0.165f, 0.1f, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if(roundController.isGameOver()){
+			this.game.setScreen(new GameOverScreen(game,heroController.getHero().getTotalScore()));
+		}
+		heroController.update(delta);
 		roundController.update(delta);
 		roundView.render();
 	}
@@ -57,60 +68,7 @@ public class RoundScreen implements Screen, InputProcessor {
 
 	@Override
 	public void dispose() {
+		this.roundView.dispose();
+		MusicPlayer.getInstance().dispose();
 	}
-
-	@Override
-	public boolean keyDown(int keycode) {
-		Hero hero = this.round.getHero();
-		float speed = hero.getSpeedValue();
-		if (keycode == Keys.LEFT) {
-			hero.translateX(-speed);
-		}
-		if (keycode == Keys.RIGHT) {
-			hero.translateX(speed);
-		}
-		if (keycode == Keys.UP) {
-			hero.translateY(speed);
-		}
-		if (keycode == Keys.DOWN) {
-			hero.translateY(-speed);
-		}
-		return true;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		return false;
-	}
-
 }

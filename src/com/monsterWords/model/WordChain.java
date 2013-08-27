@@ -1,22 +1,21 @@
 package com.monsterWords.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
 
 public class WordChain {
 
-	private List<Letter> letterChain;
+	private Array<Letter> letterChain;
 
 	public WordChain() {
 		super();
-		this.letterChain = new ArrayList<Letter>();
+		this.letterChain = new Array<Letter>();
 	}
 
-	public List<Letter> getLetterChain() {
+	public Array<Letter> getLetterChain() {
 		return letterChain;
 	}
 
-	public void setLetterChain(List<Letter> letterChain) {
+	public void setLetterChain(Array<Letter> letterChain) {
 		this.letterChain = letterChain;
 	}
 
@@ -24,7 +23,7 @@ public class WordChain {
 		this.letterChain.add(letter);
 	}
 
-	public String toString() {
+	public String convertToString() {
 		String word = "";
 		for (Letter letter : letterChain) {
 			word += letter.getLetter();
