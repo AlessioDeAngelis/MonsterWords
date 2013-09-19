@@ -29,7 +29,7 @@ public class EnglishLanguageController extends LanguageController {
 				'j', 'x', 'q', 'z' };
 		for (int i = 0; i < letterDistribution.length; i++) {
 			Random random = new Random();
-			Letter letter = new Letter(letterDistribution[i], i + random.nextInt());
+			Letter letter = new Letter(letterDistribution[i], i + random.nextInt()*random.nextInt()*random.nextInt());
 			lettersAvailable.add(letter);
 		}
 		this.getLanguage().setDictionaryPath(Constants.ENGLISH_WORD_LIST_PATH);

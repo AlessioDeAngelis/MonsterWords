@@ -44,6 +44,7 @@ public class TitleView {
 		for(Texture texture : name2texture.values()){
 			texture.dispose();
 		}
+		MusicPlayer.getInstance().dispose();
 		this.spriteBatch.dispose();
 	}
 }

@@ -1,6 +1,7 @@
 package com.monsterWords.controller.factories;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.monsterWords.model.button.*;
 
 public class GameButtonFactory {
@@ -37,9 +38,11 @@ public class GameButtonFactory {
 				gameButton = new CreditsButton(game, x, y, 315, 60);// TODO: fix
 																	// size
 			} else if (buttonName.equals("highscore")) {
-				gameButton = new CreditsButton(game, x, y, 442, 60);// TODO: fix
+				gameButton = new HighscoreButton(game, x, y, 442, 60);// TODO: fix
 			} else if (buttonName.equals("rules")) {
-				gameButton = new CreditsButton(game, x, y, 245, 60);// TODO: fix
+				gameButton = new RulesButton(game, x, y, 245, 60);// TODO: fix
+			} else if (buttonName.equals("continue")) {
+				gameButton = new RulesButton(game, x, y, 100,100);// TODO: fix
 			}
 		}
 		return gameButton;

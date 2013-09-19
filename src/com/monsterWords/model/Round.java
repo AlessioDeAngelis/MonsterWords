@@ -96,6 +96,9 @@ public class Round {
 	}
 
 	public void update(float dt) {
+		for(Letter letter: this.lettersOnTheTable){
+			letter.update(dt);
+		}
 		checkingPlatform.update(dt);
 		hero.update(dt);
 		monster.update(dt);
@@ -112,6 +115,18 @@ public class Round {
 				this.box2DWorld.destroyBody(body);
 			}
 		}
+//		for(int i = 0; i<lettersOnTheTable.size();i++){
+//			Letter l = lettersOnTheTable.get(i);
+//			if(l.getBody()==null){
+//				this.lettersOnTheTable.remove(l);
+//
+//			}
+//		}
+//		for(Letter letter:lettersOnTheTable){
+//			if(letter.getBody()==null){
+//				this.lettersOnTheTable.remove(letter);
+//			}
+//		}
 	}
 
 	public boolean isRoundOver() {

@@ -21,7 +21,7 @@ private Texture background;
 	public void render(float delta) {
 		spriteBatch.begin();
 		spriteBatch.draw(this.background,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-		font.drawMultiLine(spriteBatch, "Monsters Word \n developed by \n Alessio De Angelis \n \n Copyright 2013 \n \n Powered by libGDX \n \n Soundtrack from \n http://incompetech.com/ \n by Kevin MacLeod  ",450, Gdx.graphics.getHeight()-20);
+		font.drawMultiLine(spriteBatch, "Monster Words \n developed by \n Alessio De Angelis \n \n Copyright 2013 \n \n Powered by libGDX \n \n Soundtrack title: \"Sylly Fun\" from \n http://incompetech.com/ \n by Kevin MacLeod  ",450, Gdx.graphics.getHeight()-20);
 		spriteBatch.end();
 	}
 	

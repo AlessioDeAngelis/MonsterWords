@@ -1,6 +1,9 @@
 package com.monsterWords.model.hero;
 
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.monsterWords.model.AnimatedScore;
 import com.monsterWords.model.Entity;
 import com.monsterWords.model.WordChain;
 import com.monsterWords.utils.Constants;
@@ -11,15 +14,29 @@ public class Hero extends Entity {
 	private WordChain lettersCollected;
 	private boolean isOnPlatform;
 	private int totalScore;
+	private AnimatedScore lastScoreEarned;// the score earned with the last correct word
 	private HeroState state;
 
 	public Hero() {
 		super();
-		this.setSpeedValue(25);
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			this.setSpeedValue(35);
+		} else {
+			this.setSpeedValue(20);
+		}
 		this.lettersCollected = new WordChain();
 		this.isOnPlatform = false;
 		this.totalScore = 0;
+		this.lastScoreEarned = new AnimatedScore();
 		this.state = new MoveRight();
+	}
+
+	public AnimatedScore getLastScoreEarned() {
+		return lastScoreEarned;
+	}
+
+	public void setLastScoreEarned(AnimatedScore lastScoreEarned) {
+		this.lastScoreEarned = lastScoreEarned;
 	}
 
 	public HeroState getState() {
@@ -36,7 +53,7 @@ public class Hero extends Entity {
 
 	public void setTotalScore(int totalScore) {
 		this.totalScore = totalScore;
-	}	
+	}
 
 	public boolean isOnPlatform() {
 		return isOnPlatform;
@@ -69,9 +86,10 @@ public class Hero extends Entity {
 
 	@Override
 	public void update(float dt) {
-		if(this.getX()<0){
-			this.setPosition(0,this.getY());
-		}if(this.getY()<0){
+		if (this.getX() < 0) {
+			this.setPosition(0, this.getY());
+		}
+		if (this.getY() < 0) {
 			this.setPosition(this.getX(), 0);
 		}
 		Body body = this.getBody();
@@ -82,12 +100,12 @@ public class Hero extends Entity {
 		}
 		this.state.update(dt);
 	}
-	
-	public void addScore(int score){
+
+	public void addScoreToTotal(int score) {
 		this.totalScore += score;
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		this.lettersCollected = new WordChain();
 		this.isOnPlatform = false;
 	}
