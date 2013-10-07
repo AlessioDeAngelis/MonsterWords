@@ -26,13 +26,29 @@ public class GameButtonFactory {
 	public GameButton createGameButton(String buttonName, float x, float y, Game game) {
 		GameButton gameButton = null;
 		if (buttonName != null) {
+			/**
+			 * FLAG BUTTONS
+			 * */
 			if (buttonName.equals("italianFlag")) {
 				gameButton = new ItalianFlagButton(game, x, y, 100, 100);
 			} else if (buttonName.equals("englishFlag")) {
 				gameButton = new EnglishFlagButton(game, x, y, 100, 100);
 			} else if (buttonName.equals("norwegianFlag")) {
 				gameButton = new NorwegianFlagButton(game, x, y, 100, 100);
-			} else if (buttonName.equals("play")) {
+			} else if (buttonName.equals("spanishFlag")) {
+				gameButton = new SpanishFlagButton(game, x, y, 100, 100);
+			} 
+			else if (buttonName.equals("frenchFlag")) {
+				gameButton = new FrenchFlagButton(game, x, y, 100, 100);
+			} 
+			else if (buttonName.equals("germanFlag")) {
+				gameButton = new GermanFlagButton(game, x, y, 100, 100);
+			} 
+			
+			/**
+			 * GAME BUTTONS
+			 * */
+			else if (buttonName.equals("play")) {
 				gameButton = new PlayGameButton(game, x, y, 195, 60);
 			} else if (buttonName.equals("credits")) {
 				gameButton = new CreditsButton(game, x, y, 315, 60);// TODO: fix

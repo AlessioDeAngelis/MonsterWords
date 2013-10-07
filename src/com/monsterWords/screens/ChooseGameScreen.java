@@ -32,7 +32,13 @@ public class ChooseGameScreen implements Screen {
 		this.buttons.add(gameButton);
 		gameButton = GameButtonFactory.getInstance().createGameButton("englishFlag", 600, 300, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("norwegianFlag", (600 + 450) / 2, 200, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("norwegianFlag", 450, 200, game);
+		this.buttons.add(gameButton);
+		gameButton = GameButtonFactory.getInstance().createGameButton("frenchFlag", 600, 200, game);
+		this.buttons.add(gameButton);
+		gameButton = GameButtonFactory.getInstance().createGameButton("spanishFlag", 450, 100, game);
+		this.buttons.add(gameButton);
+		gameButton = GameButtonFactory.getInstance().createGameButton("germanFlag",600, 100, game);
 		this.buttons.add(gameButton);
 
 	}

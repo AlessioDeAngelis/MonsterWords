@@ -15,7 +15,7 @@ public class GameOverView {
 
 	public GameOverView(int roundScore) {
 		this.roundScore = roundScore;
-		this.background = new Texture(Gdx.files.internal("model/titleScreen.png"));
+		this.background = new Texture(Gdx.files.internal("model/titleScreen.jpg"));
 
 		this.spriteBatch = new SpriteBatch();
 		this.font = new BitmapFont();

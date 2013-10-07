@@ -17,11 +17,11 @@ public class RulesView {
 		this.continueButton = continueButton;
 		this.goBackButton = goBackButton;
 		this.spriteBatch = new SpriteBatch();
-		this.slides = new Texture[] { new Texture(Gdx.files.internal("model/rules/slide.png")),
-				new Texture(Gdx.files.internal("model/rules/slide2.png")),
-				new Texture(Gdx.files.internal("model/rules/slide3.png")),
-				new Texture(Gdx.files.internal("model/rules/rules2.png")),
-				new Texture(Gdx.files.internal("model/rules/rules3.png")) };
+		this.slides = new Texture[] { new Texture(Gdx.files.internal("model/rules/slide.jpg")),
+				new Texture(Gdx.files.internal("model/rules/slide2.jpg")),
+				new Texture(Gdx.files.internal("model/rules/slide3.jpg")),
+				new Texture(Gdx.files.internal("model/rules/rules2.jpg")),
+				new Texture(Gdx.files.internal("model/rules/rules3.jpg")) };
 		this.buttonTexture = new Texture(Gdx.files.internal("model/button/continueButton.png"));
 		this.flipButtonTexture = new Texture(Gdx.files.internal("model/button/goBackButton.png"));
 		this.counter = 0;

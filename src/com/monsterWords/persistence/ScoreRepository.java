@@ -43,7 +43,7 @@ public class ScoreRepository {
 	 * Retrieves the highscore
 	 * */
 	public int retrieveScore() {
-		FileHandle file = Gdx.files.local(filePath);
+		FileHandle file = Gdx.files.local(filePath);//internal does not work
 		String stringa = file.readString();
 		int score = -1;
 		if(stringa!=null||stringa!=""){

@@ -13,7 +13,7 @@ public class HighscoreView {
 	private int highscore;
 
 	public HighscoreView(int highscore) {
-		this.background = new Texture(Gdx.files.internal("model/titleScreen.png"));
+		this.background = new Texture(Gdx.files.internal("model/titleScreen.jpg"));
 		this.highscore = highscore;
 		this.spriteBatch = new SpriteBatch();
 		this.font = new BitmapFont();

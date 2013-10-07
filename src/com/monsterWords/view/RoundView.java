@@ -100,8 +100,18 @@ public class RoundView {
 
 		// NORWEGIAN LETTERS
 		this.name2texture.put("æ", new Texture(Gdx.files.internal("letters/ae.png")));
-		this.name2texture.put("ø", new Texture(Gdx.files.internal("letters/oo.png")));
+		this.name2texture.put("ø", new Texture(Gdx.files.internal("letters/oe.png")));
 		this.name2texture.put("å", new Texture(Gdx.files.internal("letters/aa.png")));
+
+		//SPANISH LETTERS		
+		this.name2texture.put("ñ", new Texture(Gdx.files.internal("letters/enie.png")));
+		
+		//GERMAN LETTERS ß
+		this.name2texture.put("ß", new Texture(Gdx.files.internal("letters/ss.png")));
+		this.name2texture.put("ä", new Texture(Gdx.files.internal("letters/aDieresi.png")));
+		this.name2texture.put("ö", new Texture(Gdx.files.internal("letters/oDieresi.png")));
+		this.name2texture.put("ü", new Texture(Gdx.files.internal("letters/uDieresi.png")));
+
 
 		/**
 		 * Platform
@@ -113,7 +123,7 @@ public class RoundView {
 		/**
 		 * Background
 		 * */
-		this.name2texture.put("background", new Texture(Gdx.files.internal("model/background.png")));
+		this.name2texture.put("background", new Texture(Gdx.files.internal("model/background.jpg")));
 		this.name2texture.put("bar", new Texture(Gdx.files.internal("model/bar.png")));
 
 		/**
@@ -132,7 +142,8 @@ public class RoundView {
 		renderBar();
 		renderBodies();
 		renderText();
-		renderScoreLastWord();
+		/*//uncomment this if you want to render the score using an easy function
+		renderScoreLastWord();*/
 		spriteBatch.end();
 		// this.debugRenderer.render(this.round.getBox2DWorld(),
 		// cam.combined);//uncomment if you want to render box2d objects

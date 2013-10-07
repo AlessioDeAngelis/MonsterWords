@@ -10,7 +10,7 @@ private SpriteBatch spriteBatch;
 private BitmapFont font;
 private Texture background;
 	public CreditsView(){
-		this.background = new Texture(Gdx.files.internal("model/titleScreen.png"));
+		this.background = new Texture(Gdx.files.internal("model/titleScreen.jpg"));
 
 		this.spriteBatch = new SpriteBatch();
 		this.font = new BitmapFont();

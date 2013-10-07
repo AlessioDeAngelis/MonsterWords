@@ -13,12 +13,12 @@ public class PauseView {
 	public PauseView(){
 		this.spriteBatch = new SpriteBatch();
 		this.manager = new AssetManager();
-		manager.load("model/background.png", Texture.class);
+		manager.load("model/background.jpg", Texture.class);
 	}
 	
 	public void draw(){
-		if(manager.isLoaded("model/background.png", Texture.class)){
-			tex = manager.get("model/background.png", Texture.class);
+		if(manager.isLoaded("model/background.jpg", Texture.class)){
+			tex = manager.get("model/background.jpg", Texture.class);
 			spriteBatch.draw(tex, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		}
 	}
