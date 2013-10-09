@@ -1,6 +1,8 @@
 package com.monsterWords.controller.languages;
 
 
+import java.util.Random;
+
 import com.badlogic.gdx.utils.Array;
 import com.monsterWords.model.Language;
 import com.monsterWords.model.Letter;
@@ -38,11 +40,17 @@ public abstract class LanguageController {
 	public abstract void initializeLanguage();
 	
 	public Array<Letter> giveACombination(float numberOfLetters) {
+		//The letters available are shuffled and the first numberOfLetter elements are popped from
+		//the array. If the are not enough lettersAvailable, the array is initialized again
 		Array<Letter> combination = new Array<Letter>();
 		Array<Letter> lettersAvailable = this.getLanguage().getLettersAvailable();
 		lettersAvailable.shuffle();
+		if(lettersAvailable.size<=numberOfLetters){
+			this.initializeLanguage();
+		}
 		for (int i = 0; i < numberOfLetters; i++) {
-			combination.add(lettersAvailable.get(i));
+			Letter letter = lettersAvailable.pop();			
+			combination.add(letter);
 		}
 		return combination;
 	}

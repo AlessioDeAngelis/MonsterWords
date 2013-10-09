@@ -5,18 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class GameOverView {
+public class HighscoreView {
 
-	private int roundScore;
 	private BitmapFont font;
 	private SpriteBatch spriteBatch;
 	private Texture background;
+	private int highscore;
 
-
-	public GameOverView(int roundScore) {
-		this.roundScore = roundScore;
+	public HighscoreView(int highscore) {
 		this.background = new Texture(Gdx.files.internal("model/titleScreen.jpg"));
-
+		this.highscore = highscore;
 		this.spriteBatch = new SpriteBatch();
 		this.font = new BitmapFont();
 		this.font = new BitmapFont(Gdx.files.internal("fonts/gameOverFont.fnt"),
@@ -27,7 +25,7 @@ public class GameOverView {
 		spriteBatch.begin();
 		spriteBatch.draw(this.background,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
-		font.drawMultiLine(spriteBatch, "TIME IS OVER \nYOUR SCORE: " + roundScore, 300, 300);
+		font.drawMultiLine(spriteBatch, "YOUR\nHIGHSCORE \n IS:" + highscore, 400, Gdx.graphics.getHeight()-50);
 		spriteBatch.end();
 	}
 

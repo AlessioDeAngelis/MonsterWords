@@ -30,7 +30,7 @@ public class WordListParser {
 		String stringa = file.readString();// read the string
 		String[] splits = stringa.split("\n");
 		for (int i = 0; i < splits.length; i++) {
-			words.add(splits[i].trim());
+			words.add(splits[i].trim().toLowerCase());
 		}
 		languageController.getLanguage().setDictionary(words);
 		return words;

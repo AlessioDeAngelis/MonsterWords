@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.monsterWords.model.AnimatedScore;
 import com.monsterWords.model.Entity;
 import com.monsterWords.model.Round;
 import com.monsterWords.model.Wall;
@@ -36,13 +37,16 @@ public class RoundView {
 	private float ppuY; // pixels per unit on the Y axis
 
 	private Round round;
-	private BitmapFont font;
+	private BitmapFont font, fontScore;
 
 	public RoundView(Round round) {
 		this.round = round;
-		this.font =  new BitmapFont();
+		this.font = new BitmapFont();
 		this.font = new BitmapFont(Gdx.files.internal("fonts/monsterFont.fnt"),
-		         Gdx.files.internal("fonts/monsterFont.png"), false);
+				Gdx.files.internal("fonts/monsterFont.png"), false);
+		this.fontScore = new BitmapFont();
+		this.fontScore = new BitmapFont(Gdx.files.internal("fonts/monsterFont.fnt"),
+				Gdx.files.internal("fonts/monsterFont.png"), false);
 		this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
 		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
@@ -84,7 +88,7 @@ public class RoundView {
 
 		// this.name2texture.put("a", new
 		// Texture(Gdx.files.internal("letters/a.png")));
-		this.name2texture.put("empty",  new Texture(Gdx.files.internal("model/empty.png")));
+		this.name2texture.put("empty", new Texture(Gdx.files.internal("model/empty.png")));
 		/**
 		 * Letters
 		 * */
@@ -93,12 +97,22 @@ public class RoundView {
 			String letterString = "" + letter;
 			this.name2texture.put(letterString, new Texture(Gdx.files.internal("letters/" + letterString + ".png")));
 		}
+
+		// NORWEGIAN LETTERS
+		this.name2texture.put("æ", new Texture(Gdx.files.internal("letters/ae.png")));
+		this.name2texture.put("ø", new Texture(Gdx.files.internal("letters/oe.png")));
+		this.name2texture.put("å", new Texture(Gdx.files.internal("letters/aa.png")));
+
+		//SPANISH LETTERS		
+		this.name2texture.put("ñ", new Texture(Gdx.files.internal("letters/enie.png")));
 		
-		//NORWEGIAN LETTERS
-		this.name2texture.put("æ",  new Texture(Gdx.files.internal("letters/ae.png")));
-		this.name2texture.put("ø",  new Texture(Gdx.files.internal("letters/oo.png")));
-		this.name2texture.put("å",  new Texture(Gdx.files.internal("letters/aa.png")));
-		
+		//GERMAN LETTERS ß
+		this.name2texture.put("ß", new Texture(Gdx.files.internal("letters/ss.png")));
+		this.name2texture.put("ä", new Texture(Gdx.files.internal("letters/aDieresi.png")));
+		this.name2texture.put("ö", new Texture(Gdx.files.internal("letters/oDieresi.png")));
+		this.name2texture.put("ü", new Texture(Gdx.files.internal("letters/uDieresi.png")));
+
+
 		/**
 		 * Platform
 		 * */
@@ -109,7 +123,7 @@ public class RoundView {
 		/**
 		 * Background
 		 * */
-		this.name2texture.put("background", new Texture(Gdx.files.internal("model/background.png")));
+		this.name2texture.put("background", new Texture(Gdx.files.internal("model/background.jpg")));
 		this.name2texture.put("bar", new Texture(Gdx.files.internal("model/bar.png")));
 
 		/**
@@ -128,13 +142,16 @@ public class RoundView {
 		renderBar();
 		renderBodies();
 		renderText();
+		/*//uncomment this if you want to render the score using an easy function
+		renderScoreLastWord();*/
 		spriteBatch.end();
-		this.debugRenderer.render(this.round.getBox2DWorld(), cam.combined);
+		// this.debugRenderer.render(this.round.getBox2DWorld(),
+		// cam.combined);//uncomment if you want to render box2d objects
 		// this.debugRenderer.setDrawVelocities(true);
 	}
 
 	private void renderBar() {
-		spriteBatch.draw(this.name2texture.get("bar"),0, Gdx.graphics.getHeight()-Constants.TOP_BAR_TICKNESS);
+		spriteBatch.draw(this.name2texture.get("bar"), 0, Gdx.graphics.getHeight() - Constants.TOP_BAR_TICKNESS);
 	}
 
 	private void renderBodies() {
@@ -143,11 +160,12 @@ public class RoundView {
 			this.round.getBox2DWorld().getBodies(bodies);
 			for (Body body : bodies) {
 				Object userData = body.getUserData();
-				if (userData != null && Entity.class.isAssignableFrom(userData.getClass())&& !(Wall.class.isAssignableFrom(userData.getClass()))) {
+				if (userData != null && Entity.class.isAssignableFrom(userData.getClass())
+						&& !(Wall.class.isAssignableFrom(userData.getClass()))) {
 					Entity entity = (Entity) userData;
 					String textureName = entity.getTextureName();
-//					 letterSprite.setRotation((float)
-//					 Math.toDegrees(body.getAngle()));
+					// letterSprite.setRotation((float)
+					// Math.toDegrees(body.getAngle()));
 					spriteBatch.draw(this.name2texture.get(textureName), body.getPosition().x * WORLD_SCALE,
 							body.getPosition().y * WORLD_SCALE);
 				}
@@ -205,27 +223,45 @@ public class RoundView {
 	// }
 
 	private void renderBackground() {
-		spriteBatch.draw(this.name2texture.get("background"),0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		spriteBatch.draw(this.name2texture.get("background"), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	public void renderText() {
 		float y = Gdx.graphics.getHeight() - Constants.TOP_BAR_TICKNESS + 30;
 		CharSequence str = this.round.getHero().getLettersCollected().convertToString().toUpperCase();
 		font.draw(spriteBatch, str, Gdx.graphics.getWidth() / 2 - 50, y);
-		str = "Score: "+this.round.getHero().getTotalScore();
-		font.draw(spriteBatch, str, Gdx.graphics.getWidth()-300,y);
-		str = "Time: "+(int)this.round.getTimer().getTimeLeft();
-		font.draw(spriteBatch, str,20, y);
-//		str = ""+(int)this.round.getHero().getX() + "," + this.round.getHero().getY();
-//		font.draw(spriteBatch, str,50, y);
+		str = "Score: " + this.round.getHero().getTotalScore();
+		font.draw(spriteBatch, str, Gdx.graphics.getWidth() - 200, y);
+		str = "Time: " + (int) this.round.getTimer().getTimeLeft();
+		font.draw(spriteBatch, str, 20, y);
+		// str = ""+(int)this.round.getHero().getX() + "," +
+		// this.round.getHero().getY();
+		// font.draw(spriteBatch, str,50, y);
 
 	}
-	
-	public void dispose(){
+
+	public void renderScoreLastWord() {
+		AnimatedScore animatedScore = this.round.getHero().getLastScoreEarned();
+		int lastScore = animatedScore.getValue();
+		CharSequence str = "+" + lastScore;
+		fontScore.setColor(animatedScore.getColor());
+		// fontScore.scale(0.5f);
+		if (animatedScore.isStartTweening()) {
+			fontScore.draw(spriteBatch, str, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);// for
+																										// alpha
+		}
+		// font.draw(spriteBatch, str, animatedScore.getX(),
+		// animatedScore.getY());//for the position
+
+	}
+
+	public void dispose() {
 		this.font.dispose();
-		for(Texture texture : this.name2texture.values()){
+		this.fontScore.dispose();
+		for (Texture texture : this.name2texture.values()) {
 			texture.dispose();
 		}
 		spriteBatch.dispose();
+		MusicPlayer.getInstance().dispose();
 	}
 }

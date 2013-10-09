@@ -27,14 +27,14 @@ public class ChooseGameView {
 			name = button.getName();
 			this.name2texture.put(name, new Texture(Gdx.files.internal("model/flag/" + name + ".png")));
 		}
-		this.name2texture.put("background",new Texture(Gdx.files.internal("model/titleScreen.png")));
+		this.name2texture.put("background",new Texture(Gdx.files.internal("model/titleScreen.jpg")));
 	}
 
 	public void render(float delta) {
 		spriteBatch.begin();
 		spriteBatch.draw(this.name2texture.get("background"),0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		for(GameButton gameButton : buttons){
-			spriteBatch.draw(this.name2texture.get(gameButton.getName()),gameButton.getX(),gameButton.getY());
+			spriteBatch.draw(this.name2texture.get(gameButton.getName()),gameButton.getX(),gameButton.getY(),gameButton.getWidth(), gameButton.getHeight());
 		}
 		spriteBatch.end();
 	}

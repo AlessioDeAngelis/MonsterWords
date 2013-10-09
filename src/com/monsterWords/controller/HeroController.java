@@ -76,43 +76,40 @@ public class HeroController implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		float speed = hero.getSpeedValue();
-		if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) - hero.getOriginY()) {
-			if (screenX < hero.getX()) {
-				hero.setState(new MoveLeft());
-				hero.translateX(-speed);
-			} else {
-				hero.setState(new MoveRight());
-				hero.translateX(speed);
-			}
-		} else {
-			if (screenY > hero.getY()) {
-				hero.setState(new MoveDown());
-				hero.translateY(-speed);
-			} else {
-				hero.setState(new MoveUp());
-				hero.translateY(speed);
-			}
-		}
-
-		// if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) -
-		// hero.getOriginY()) {
-		if (screenX < hero.getX()) {
-			// hero.setState(new MoveLeft());
-			hero.translateX(-speed);
-		} else {
-			// hero.setState(new MoveRight());
-			hero.translateX(speed);
-		}
-		// } else {
-		if (screenY < hero.getY()) {
-			// hero.setState(new MoveDown());
-			hero.translateY(speed);
-		} else {
-			// hero.setState(new MoveUp());
-			hero.translateY(-speed);
-			// }
-		}
+//		float speed = hero.getSpeedValue();
+//		if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) - hero.getOriginY()) {
+//			if (screenX < hero.getX()) {
+//				hero.setState(new MoveLeft());
+//				hero.translateX(-speed);
+//			} else {
+//				hero.setState(new MoveRight());
+//				hero.translateX(speed);
+//			}
+//		} else {
+//			if (screenY > hero.getY()) {
+//				hero.setState(new MoveDown());
+//				hero.translateY(-speed);
+//			} else {
+//				hero.setState(new MoveUp());
+//				hero.translateY(speed);
+//			}
+//		}
+//
+//
+//		if (screenX < hero.getX()) {
+//			hero.translateX(-speed);
+//		} else {
+//			hero.translateX(speed);
+//		}
+//		// } else {
+//		if (screenY < hero.getY()) {
+//			// hero.setState(new MoveDown());
+//			hero.translateY(speed);
+//		} else {
+//			// hero.setState(new MoveUp());
+//			hero.translateY(-speed);
+//			// }
+//		}
 
 		return false;
 	}
@@ -124,24 +121,24 @@ public class HeroController implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		float speed = hero.getSpeedValue();
-		if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) - hero.getOriginY()) {
-			if (screenX < hero.getX()) {
-				hero.setState(new MoveLeft());
-				hero.translateX(-speed);
-			} else {
-				hero.setState(new MoveRight());
-				hero.translateX(speed);
-			}
-		} else {
-			if (screenY > hero.getY()) {
-				hero.setState(new MoveDown());
-				hero.translateY(-speed);
-			} else {
-				hero.setState(new MoveUp());
-				hero.translateY(speed);
-			}
-		}
+//		float speed = hero.getSpeedValue();
+//		if (Math.abs(screenX - hero.getX()) > Math.abs(screenY) - hero.getOriginY()) {
+//			if (screenX < hero.getX()) {
+//				hero.setState(new MoveLeft());
+//				hero.translateX(-speed);
+//			} else {
+//				hero.setState(new MoveRight());
+//				hero.translateX(speed);
+//			}
+//		} else {
+//			if (screenY > hero.getY()) {
+//				hero.setState(new MoveDown());
+//				hero.translateY(-speed);
+//			} else {
+//				hero.setState(new MoveUp());
+//				hero.translateY(speed);
+//			}
+//		}
 		return false;
 	}
 

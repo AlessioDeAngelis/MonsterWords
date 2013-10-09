@@ -1,6 +1,10 @@
 package com.monsterWords.controller;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,8 +14,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
-import com.monsterWords.controller.languages.ItalianLanguageController;
 import com.monsterWords.controller.languages.LanguageController;
+import com.monsterWords.model.AnimatedScore;
 import com.monsterWords.model.CheckingPlatform;
 import com.monsterWords.model.CheckingPlatform.PlatformState;
 import com.monsterWords.model.Letter;
@@ -29,6 +33,7 @@ public class RoundController {
 	private ScoreManager scoreManager;
 	private LanguageController languageController;
 	private HeroController heroController;
+	private TweenManager tweenManager;
 
 	public RoundController(Round round, HeroController heroController, LanguageController languageController) {
 		super();
@@ -36,6 +41,10 @@ public class RoundController {
 		this.scoreManager = new ScoreManager();
 		this.heroController = heroController;
 		this.languageController = languageController;
+		// We need a manager to handle every tween.
+		Tween.registerAccessor(AnimatedScore.class, new AnimatedScoreAccessor());
+		this.tweenManager = new TweenManager();
+
 	}
 
 	public HeroController getHeroController() {
@@ -52,7 +61,7 @@ public class RoundController {
 
 	public void setUpBox2D() {
 		createHero();
-		createLetters(10);
+		createLetters(10, false);
 		createWalls();
 		createPlatform();
 		createMonster();
@@ -156,7 +165,7 @@ public class RoundController {
 		this.round.setHero(hero);
 	}
 
-	public void createLetters(int numberOfLetters) {
+	public void createLetters(int numberOfLetters, boolean randomOrder) {
 		Array<Letter> letters = this.languageController.giveACombination(numberOfLetters);
 		letters.shuffle();
 		float circleSpeed = 10;// previous 50
@@ -167,13 +176,22 @@ public class RoundController {
 			// doesnt
 			// move we would set it to StaticBody
 			bodyDef.type = BodyType.DynamicBody;
+			float x = 300;
+			float y = 300;
+			if (randomOrder) {
+				x = Math.round(Math.random() * 500 + 100);
+				y = Math.round(Math.random() * 300 + 100);
+			}
 			// Set our body's starting position in the world
-//			float x = Math.round(Math.random() * Gdx.graphics.getWidth() +20);
-//			;
-//			float y = Math.round(Math.random() * Gdx.graphics.getHeight() +20-100);
-			float x = Math.round(Math.random() * 600 +100);
-			;
-			float y = Math.round(Math.random() * 400 + 100);
+			// float x = Math.round(Math.random() * Gdx.graphics.getWidth()
+			// +20);
+			// ;
+			// float y = Math.round(Math.random() * Gdx.graphics.getHeight()
+			// +20-100);
+			// float x = Math.round(Math.random() * 600 +100);
+			//
+			// float y = Math.round(Math.random() * 400 + 100);
+
 			if (this.heroController != null && this.heroController.getHero() != null) {
 				while (this.heroController.getHero().getBoundingRectangle().contains(x, y)) { // to
 																								// avoid
@@ -188,8 +206,8 @@ public class RoundController {
 																								// the
 																								// starting
 																								// position
-					x = Math.round(Math.random() * 600 +100 );
-					y = Math.round(Math.random() * 400 + 100);
+					x = Math.round(Math.random() * 500 + 100);
+					y = Math.round(Math.random() * 300 + 100);
 				}
 			}
 			bodyDef.position.set(x / WORLD_SCALE, y / WORLD_SCALE);
@@ -279,7 +297,10 @@ public class RoundController {
 			// this.round.getCheckingPlatform().setWordMatchFound(matchOccurred);
 			if (matchOccurred) {
 				int wordScore = this.scoreManager.score(word);
-				hero.addScore(wordScore);
+				hero.addScoreToTotal(wordScore);
+				hero.getLastScoreEarned().setValue(wordScore);
+				hero.getLastScoreEarned().setStartTweening(true);
+				startTweeningTheScore(hero.getLastScoreEarned());
 				this.round.getCheckingPlatform().setWordMatchFound(true);
 				this.round.getCheckingPlatform().setCurrentState(PlatformState.OK);
 				MusicPlayer.getInstance().playSoundCorrect();
@@ -288,15 +309,33 @@ public class RoundController {
 				this.round.getCheckingPlatform().setWordMatchFound(false);
 				this.round.getCheckingPlatform().setCurrentState(PlatformState.WRONG);
 			}
-			hero.reset();
 			int numberOfLettersToAdd = 10 - this.round.getLettersOnTheTable().size();
 			if (numberOfLettersToAdd > 0) {
-				// createLetters(numberOfLettersToAdd);
-				this.round.clearTable();// added
-				createLetters(10);// let's try with 10 to let the game be more
-									// interesting;
+				createLetters(numberOfLettersToAdd, true);
+
 			}
+			hero.reset();
 		}
+		this.tweenManager.update(delta);
+	}
+
+	private void startTweeningTheScore(AnimatedScore animatedScore) {
+//		// position_xy
+//
+//
+//		Tween.to(animatedScore, 3, 2.0f).target(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2)
+//				.ease(Back.INOUT).start(tweenManager);
+		//alpha
+		Tween.set(animatedScore, AnimatedScoreAccessor.ALPHA).target(0).start(tweenManager);
+//        Tween.to(animatedScore, AnimatedScoreAccessor.ALPHA, 1.5f).target(1).repeatYoyo(1, .5f).start(tweenManager);
+        Tween myTween = Tween.to(animatedScore, AnimatedScoreAccessor.ALPHA, 1.5f).target(1).start(tweenManager);
+        if(myTween.isFinished()){
+        	this.heroController.getHero().getLastScoreEarned().setStartTweening(false);
+        	Color color = this.heroController.getHero().getLastScoreEarned().getColor();
+        	color.a = 1;
+        	this.heroController.getHero().getLastScoreEarned().setColor(color);
+        }
+
 	}
 
 	public boolean isGameOver() {

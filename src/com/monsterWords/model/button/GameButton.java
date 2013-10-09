@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public abstract class GameButton extends Sprite {
 	private Game game;
 	private String name;
+	private boolean active;
 
 	public GameButton(Game game, float x, float y, float width, float height) {
 		super();
@@ -15,6 +16,7 @@ public abstract class GameButton extends Sprite {
 		this.name = "";
 		this.setBounds(x, y, width, height);
 		this.setPosition(x, y);
+		this.setActive(true);
 	}
 
 	public String getName() {
@@ -34,4 +36,12 @@ public abstract class GameButton extends Sprite {
 	}
 
 	public abstract void executeAction();
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }
