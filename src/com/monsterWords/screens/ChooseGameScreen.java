@@ -28,17 +28,20 @@ public class ChooseGameScreen implements Screen {
 	}
 
 	private void initializeButtons() {
-		GameButton gameButton = GameButtonFactory.getInstance().createGameButton("italianFlag", 450, 300, game);
+		float texelWidth = Gdx.graphics.getWidth()/12f;
+		float texelHeight = Gdx.graphics.getHeight()/10f;
+		//previously (600 or 450) and (300,200,100)
+		GameButton gameButton = GameButtonFactory.getInstance().createGameButton("italianFlag", texelWidth * 6, texelHeight * 6, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("englishFlag", 600, 300, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("englishFlag", texelWidth * 8, texelHeight * 6, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("norwegianFlag", 450, 200, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("spanishFlag", texelWidth * 10, texelHeight * 6, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("frenchFlag", 600, 200, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("frenchFlag", texelWidth * 6, texelHeight * 3, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("spanishFlag", 450, 100, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("germanFlag", texelWidth * 8, texelHeight * 3, game);
 		this.buttons.add(gameButton);
-		gameButton = GameButtonFactory.getInstance().createGameButton("germanFlag",600, 100, game);
+		gameButton = GameButtonFactory.getInstance().createGameButton("norwegianFlag",texelWidth * 10, texelHeight * 3, game);
 		this.buttons.add(gameButton);
 
 	}

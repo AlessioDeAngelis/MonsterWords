@@ -29,20 +29,22 @@ public class GameButtonFactory {
 			/**
 			 * FLAG BUTTONS
 			 * */
+			float texelWidth = Gdx.graphics.getWidth()/12f;
+			texelWidth = 100;
 			if (buttonName.equals("italianFlag")) {
-				gameButton = new ItalianFlagButton(game, x, y, 100, 100);
+				gameButton = new ItalianFlagButton(game, x, y, texelWidth, texelWidth);//previuosly (100,100)
 			} else if (buttonName.equals("englishFlag")) {
-				gameButton = new EnglishFlagButton(game, x, y, 100, 100);
+				gameButton = new EnglishFlagButton(game, x, y, texelWidth, texelWidth);
 			} else if (buttonName.equals("norwegianFlag")) {
-				gameButton = new NorwegianFlagButton(game, x, y, 100, 100);
+				gameButton = new NorwegianFlagButton(game, x, y, texelWidth, texelWidth);
 			} else if (buttonName.equals("spanishFlag")) {
-				gameButton = new SpanishFlagButton(game, x, y, 100, 100);
+				gameButton = new SpanishFlagButton(game, x, y,texelWidth, texelWidth);
 			} 
 			else if (buttonName.equals("frenchFlag")) {
-				gameButton = new FrenchFlagButton(game, x, y, 100, 100);
+				gameButton = new FrenchFlagButton(game, x, y, texelWidth, texelWidth);
 			} 
 			else if (buttonName.equals("germanFlag")) {
-				gameButton = new GermanFlagButton(game, x, y, 100, 100);
+				gameButton = new GermanFlagButton(game, x, y, texelWidth, texelWidth);
 			} 
 			
 			/**

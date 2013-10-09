@@ -17,7 +17,7 @@ public class MusicPlayer {
 	private static class SingletonHolder {
 		public static final MusicPlayer INSTANCE = new MusicPlayer();
 	}
-
+//
 	public static MusicPlayer getInstance() {
 		return SingletonHolder.INSTANCE;
 	}

@@ -1,9 +1,12 @@
 package com.monsterWords.controller.factories;
 
 import com.monsterWords.controller.languages.EnglishLanguageController;
+import com.monsterWords.controller.languages.FrenchLanguageController;
+import com.monsterWords.controller.languages.GermanLanguageController;
 import com.monsterWords.controller.languages.ItalianLanguageController;
 import com.monsterWords.controller.languages.LanguageController;
 import com.monsterWords.controller.languages.NorwegianLanguageController;
+import com.monsterWords.controller.languages.SpanishLanguageController;
 
 public class LanguageControllerFactory {
 
@@ -31,6 +34,12 @@ public class LanguageControllerFactory {
 				languageController = new ItalianLanguageController();
 			} else if (languageName.equals("norwegian")) {
 				languageController = new NorwegianLanguageController();
+			} else if (languageName.equals("french")) {
+				languageController = new FrenchLanguageController();
+			} else if (languageName.equals("spanish")) {
+				languageController = new SpanishLanguageController();
+			} else if (languageName.equals("german")) {
+				languageController = new GermanLanguageController();
 			}
 		}
 		return languageController;

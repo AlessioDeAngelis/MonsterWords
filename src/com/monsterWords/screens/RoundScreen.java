@@ -55,9 +55,9 @@ public class RoundScreen implements Screen {
 			this.game.setScreen(new GameOverScreen(game, heroController.getHero().getTotalScore()));
 		}
 		// TODO: to test the pause
-		// if (Gdx.input.isKeyPressed(Keys.BACK)) {
+		 if (Gdx.input.isKeyPressed(Keys.BACK)) {
 		// pauseGame();
-		// }
+		 }
 		//
 		// if (currentGameStatus == GameStatus.GAME_PAUSED) {
 		// pauseScreen = new PauseScreen(game, this);
